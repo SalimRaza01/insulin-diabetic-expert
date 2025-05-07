@@ -88,7 +88,7 @@ class BloodCount extends StatelessWidget {
                             duration: Duration(milliseconds: 300),
                             curve: Curves.easeIn,
                             child: Container(
-                              height: height * 0.35,
+                              // height: height * 0.35,
                               width: width,
                               child: Padding(
                                 padding: MediaQuery.of(context)
@@ -111,7 +111,9 @@ class BloodCount extends StatelessWidget {
                                               .toUpperCase(),
                                           style: TextStyle(
                                             fontSize: height * 0.018,
-                                            color: Colors.white,
+                                            color:  Theme.of(context)
+                                                        .colorScheme
+                                                        .onInverseSurface,
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
@@ -131,7 +133,7 @@ class BloodCount extends StatelessWidget {
                                               Icon(Icons.water_drop_outlined,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .onPrimary),
+                                                      .onInverseSurface),
                                               const SizedBox(width: 12),
                                               Expanded(
                                                 child: TextField(
@@ -180,7 +182,7 @@ class BloodCount extends StatelessWidget {
                                               Icon(Icons.monitor_heart,
                                                   color: Theme.of(context)
                                                       .colorScheme
-                                                      .onPrimary),
+                                                      .onInverseSurface),
                                               const SizedBox(width: 12),
                                               Expanded(
                                                 child: TextField(

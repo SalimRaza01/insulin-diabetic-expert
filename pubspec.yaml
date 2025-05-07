@@ -35,7 +35,7 @@ dependencies:
   liquid_progress_indicator: ^0.4.0
   flutter_local_notifications: 
   flutter_background_service:
-  flutter_background_service_android:
+  flutter_background_service_android: ^6.3.0
   flutter:
     sdk: flutter
 
