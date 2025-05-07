@@ -42,26 +42,24 @@ class _LoginScreenState extends State<LoginScreen> {
               padding: const EdgeInsets.only(top: 0, left: 18),
               child: Column(
                 children: [
+                  
                   SizedBox(
-                    height: height * 0.06,
-                  ),
-                  SizedBox(
-                    height: height * 0.04,
+                    height: height * 0.15,
                   ),
                   Text(
-                    "INSUL",
-                    style: TextStyle(
-                        fontSize: height * 0.1,
-                        fontFamily: 'Suissnord',
-                        color: Colors.white),
-                  ),
-                  Text(
-                    "YOUR PERSONAL DIABETIC EXPERT",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: height * 0.021,
-                    ),
-                  ),
+                        "INSUL",
+                        style: TextStyle(
+                            fontSize: height * 0.055,
+                            fontFamily: 'Suissnord',
+                            color: Colors.white),
+                      ),
+                      Text(
+                        "YOUR PERSONAL DIABETIC EXPERT",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: height * 0.013,
+                        ),
+                      ),
                 ],
               ),
             ),

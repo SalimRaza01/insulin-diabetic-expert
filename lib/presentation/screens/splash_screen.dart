@@ -64,7 +64,7 @@ class _SplashscreenState extends State<Splashscreen> {
                       Text(
                         "INSUL",
                         style: TextStyle(
-                            fontSize: height * 0.09,
+                            fontSize: height * 0.055,
                             fontFamily: 'Suissnord',
                             color: Colors.white),
                       ),
@@ -72,7 +72,7 @@ class _SplashscreenState extends State<Splashscreen> {
                         "YOUR PERSONAL DIABETIC EXPERT",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: height * 0.02,
+                          fontSize: height * 0.013,
                         ),
                       ),
                     ],
@@ -83,14 +83,14 @@ class _SplashscreenState extends State<Splashscreen> {
                         "POWERED BY",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: height * 0.015,
+                          fontSize: height * 0.01,
                         ),
                       ),
                       Text(
                         "D&D Healthcare",
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: height * 0.035,
+                          fontSize: height * 0.02,
                         ),
                       ),
                     ],

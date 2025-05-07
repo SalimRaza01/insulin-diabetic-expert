@@ -7,10 +7,10 @@ class BatteryStatus extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-         final height = MediaQuery.of(context).size.height;
-     final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return Container(
-   height: height * 0.27,
+      height: height * 0.27,
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
@@ -44,18 +44,19 @@ class BatteryStatus extends StatelessWidget {
                       Text(
                         'BATTERY',
                         style: TextStyle(
-                            color: Theme.of(context).colorScheme.primaryContainer,
-                                              fontSize: height * 0.02,
-                          fontWeight:AppColor.weight600
-                        ),
+                            color:
+                                Theme.of(context).colorScheme.primaryContainer,
+                            fontSize: height * 0.02,
+                            fontWeight: AppColor.weight600),
                       ),
                       Text(
                         'updated 2 hours ago',
                         style: TextStyle(
-                                    color: Theme.of(context).colorScheme.secondaryContainer,
-                           fontSize: height * 0.013,
-                          fontWeight:AppColor.weight600
-                        ),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
+                            fontSize: height * 0.013,
+                            fontWeight: AppColor.weight600),
                       ),
                     ],
                   ),
@@ -74,30 +75,30 @@ class BatteryStatus extends StatelessWidget {
             ),
             SizedBox(height: height * 0.02),
             Row(
-            
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     children: [
                       Container(
-                       height: height * 0.15,
+                        height: height * 0.15,
                         width: width * 0.10,
-                        child: Image.asset(
-                          "assets/images/BetteryIcon.png",
-                        ),
+                        child: BatteryIndicator(batteryLevel: 0.15),
+
+                        // Image.asset(
+                        //   "assets/images/BetteryIcon.png",
+                        // ),
                       ),
                     ],
                   ),
                 ),
-              
-                 Column(
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       '50%',
                       style: TextStyle(
-                                  color: Theme.of(context).colorScheme.tertiary,
+                        color: Theme.of(context).colorScheme.tertiary,
                         fontSize: height * 0.04,
                       ),
                     ),
@@ -112,19 +113,24 @@ class BatteryStatus extends StatelessWidget {
                     Text(
                       '8 DAYS',
                       style: TextStyle(
-                color: Theme.of(context).colorScheme.tertiary,
+                        color: Theme.of(context).colorScheme.tertiary,
                         fontSize: height * 0.019,
                       ),
                     ),
                     SizedBox(height: height * 0.01),
                     Row(
                       children: [
-                        Icon(Icons.info,color: Colors.grey,),
+                        Icon(
+                          Icons.info,
+                          color: Colors.grey,
+                        ),
                         SizedBox(width: width * 0.015),
                         Text(
                           'Approx. calculation as per usage ',
                           style: TextStyle(
-                                   color: Theme.of(context).colorScheme.secondaryContainer,
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondaryContainer,
                             fontSize: height * 0.014,
                           ),
                         ),
@@ -137,6 +143,36 @@ class BatteryStatus extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class BatteryIndicator extends StatelessWidget {
+  final double batteryLevel;
+
+  const BatteryIndicator({super.key, required this.batteryLevel});
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        Image.asset(
+          "assets/images/Group 475.png",
+        ),
+        Container(
+          height: 115 * batteryLevel,
+          decoration: BoxDecoration(
+            color: batteryLevel < 0.2
+                ? Colors.red
+                : Theme.of(context).colorScheme.tertiary,
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+          ),
+        ),
+        Image.asset(
+          "assets/images/Group 476.png",
+        ),
+      ],
     );
   }
 }
