@@ -87,7 +87,7 @@ class _SplashscreenState extends State<Splashscreen> {
                         ),
                       ),
                       Text(
-                        "AgVa",
+                        "D&D Healthcare",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: height * 0.035,

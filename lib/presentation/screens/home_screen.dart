@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
 
 import 'dart:async';
+import 'package:INSUL/presentation/widgets/blood_count.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
@@ -184,8 +185,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                           return Container(
                                             height: height * 0.2,
                                             decoration: BoxDecoration(
-                                              color: Color.fromARGB(255, 5, 53, 93)
-                                            ),
+                                                color: Color.fromARGB(
+                                                    255, 5, 53, 93)),
                                             child: Padding(
                                               padding: const EdgeInsets.all(20),
                                               child: Row(
@@ -203,11 +204,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       Text(
                                                         "Bluetooth is turned off",
                                                         style: TextStyle(
-                                                          fontSize:
-                                                              height * 0.022,
-                                                          color:
-                                                             Colors.white
-                                                        ),
+                                                            fontSize:
+                                                                height * 0.022,
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                       SizedBox(
                                                         height: height * 0.02,
@@ -215,19 +215,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                       Text(
                                                         "Please turn on your bluetooth to connect insulin ",
                                                         style: TextStyle(
-                                                          fontSize:
-                                                              height * 0.012,
-                                                          color:
-                                                             Colors.white
-                                                        ),
+                                                            fontSize:
+                                                                height * 0.012,
+                                                            color:
+                                                                Colors.white),
                                                       ),
                                                     ],
                                                   ),
-                                                  Icon(
-                                                    Icons.bluetooth_disabled,
-                                                    size: height * 0.04,
-                                                    color: Colors.white
-                                                  )
+                                                  Icon(Icons.bluetooth_disabled,
+                                                      size: height * 0.04,
+                                                      color: Colors.white)
                                                 ],
                                               ),
                                             ),
@@ -746,7 +743,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (value != null) setState(() => _topModalData = value);
   }
-
 }
 
 class InsulinTopModel extends StatelessWidget {
@@ -803,267 +799,6 @@ class InsulinTopModel extends StatelessWidget {
   }
 }
 
-class BloodCount extends StatelessWidget {
-  TextEditingController bloodCountController = TextEditingController();
-  TextEditingController bloodPressureController = TextEditingController();
-  SharedPrefsHelper pref = SharedPrefsHelper();
-
-  BloodCount({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 226, 122, 0),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(18.0),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          SizedBox(
-            height: height * 0.035,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "WANT TO ADD",
-                    style: TextStyle(
-                        fontSize: height * 0.02,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w300),
-                  ),
-                  Text(
-                    "Blood count & Blood pressure !".toUpperCase(),
-                    style: TextStyle(
-                        fontSize: height * 0.015,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              SizedBox(
-                width: width * 0.01,
-              ),
-              Icon(
-                Icons.water_drop,
-                size: height * 0.05,
-                color: Colors.white,
-              ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'NOT NOW',
-                    style: TextStyle(
-                      fontSize: height * 0.015,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    showModalBottomSheet(
-                        backgroundColor: Theme.of(context).colorScheme.primary,
-                        context: context,
-                        builder: (BuildContext context) {
-                          final height = MediaQuery.of(context).size.height;
-                          final width = MediaQuery.of(context).size.width;
-                          return StatefulBuilder(builder:
-                              (BuildContext context, StateSetter setState) {
-                            return AnimatedContainer(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeIn,
-                              child: Container(
-                                height: height * 0.6,
-                                width: width,
-                                child: Padding(
-                                  padding: EdgeInsets.all(10),
-                                  child: Column(
-                                    // mainAxisAlignment:
-                                    //     MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: width * 0.03,
-                                              ),
-                                              Icon(Icons.water_drop_outlined),
-                                              SizedBox(
-                                                width: width * 0.03,
-                                              ),
-                                              SizedBox(
-                                                width: width / 2,
-                                                child: TextField(
-                                                  autofocus: true,
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  cursorColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onInverseSurface,
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onInverseSurface,
-                                                  ),
-                                                  controller:
-                                                      bloodCountController,
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    label: Text(
-                                                      'ENTER BC',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w200,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onInverseSurface,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: height * 0.01,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(10),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .onSurface,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              SizedBox(
-                                                width: width * 0.03,
-                                              ),
-                                              Icon(Icons.water_drop_outlined),
-                                              SizedBox(
-                                                width: width * 0.03,
-                                              ),
-                                              SizedBox(
-                                                width: width / 2,
-                                                child: TextField(
-                                                  keyboardType:
-                                                      TextInputType.number,
-                                                  cursorColor: Theme.of(context)
-                                                      .colorScheme
-                                                      .onInverseSurface,
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .colorScheme
-                                                        .onInverseSurface,
-                                                  ),
-                                                  controller:
-                                                      bloodPressureController,
-                                                  decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    label: Text(
-                                                      'ENTER BP',
-                                                      style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w200,
-                                                        color: Theme.of(context)
-                                                            .colorScheme
-                                                            .onInverseSurface,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: height * 0.02,
-                                      ),
-                                      Center(
-                                        child: GestureDetector(
-                                          onTap: () {
-                                            pref.putString('BloodSugarCount',
-                                                bloodCountController.text);
-                                            pref.putString('BloodPressure',
-                                                bloodPressureController.text);
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            height: height * 0.05,
-                                            width: width * 0.4,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Color.fromARGB(
-                                                  255, 5, 53, 93),
-                                            ),
-                                            child: Center(
-                                                child: Text(
-                                              'SUBMIT',
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: height * 0.02),
-                                            )),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            );
-                          });
-                        });
-                  },
-                  child: Text(
-                    'CHECK',
-                    style: TextStyle(
-                      fontSize: height * 0.015,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          )
-        ]),
-      ),
-    );
-  }
-}
 
 
 final pilateColor = const Color.fromARGB(255, 255, 0, 92); // Fat

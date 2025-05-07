@@ -126,7 +126,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   Row(
                                     children: [
                                       Icon(
-                                        Icons.dark_mode,size: height * 0.045,
+                                        Icons.dark_mode,size: height * 0.03,
                                         color: Color.fromARGB(
                                             255, 170, 170, 170),
                                       ),
@@ -191,7 +191,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Row(
                                       children: [
                                         Icon(
-                                          Icons.notifications,size: height * 0.045,
+                                          Icons.notifications,size: height * 0.03,
                                           color: Color.fromARGB(
                                               255, 170, 170, 170),
                                         ),
@@ -209,7 +209,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ],
                                     ),
                                     Icon(
-                                      Icons.arrow_forward_ios,size: height * 0.045,
+                                      Icons.arrow_forward_ios,size: height * 0.03,
                                       color:
                                           Color.fromARGB(255, 170, 170, 170),
                                     ),
@@ -255,7 +255,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Row(
                                       children: [
                                         Icon(
-                                          Icons.policy,size: height * 0.045,
+                                          Icons.policy,size: height * 0.03,
                                           color: Color.fromARGB(
                                               255, 170, 170, 170),
                                         ),
@@ -273,7 +273,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ],
                                     ),
                                     Icon(
-                                      Icons.arrow_forward_ios,size: height * 0.045,
+                                      Icons.arrow_forward_ios,size: height * 0.03,
                                       color:
                                           Color.fromARGB(255, 170, 170, 170),
                                     ),
@@ -303,7 +303,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     Row(
                                       children: [
                                         Icon(
-                                          Icons.edit_document,size: height * 0.045,
+                                          Icons.edit_document,size: height * 0.03,
                                           color: Color.fromARGB(
                                               255, 170, 170, 170),
                                         ),
@@ -321,7 +321,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       ],
                                     ),
                                     Icon(
-                                      Icons.arrow_forward_ios,size: height * 0.045,
+                                      Icons.arrow_forward_ios,size: height * 0.03,
                                       color:
                                           Color.fromARGB(255, 170, 170, 170),
                                     ),
@@ -349,7 +349,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.support_agent,size: height * 0.045,
+                                    Icons.support_agent,size: height * 0.03,
                                     color: Color.fromARGB(255, 170, 170, 170),
                                   ),
                                   SizedBox(
@@ -380,7 +380,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 ],
                               ),
                               Icon(
-                                Icons.arrow_forward_ios,size: height * 0.045,
+                                Icons.arrow_forward_ios,size: height * 0.03,
                                 color: Color.fromARGB(255, 170, 170, 170),
                               ),
                             ],
@@ -448,7 +448,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           child: Row(
                             children: [
                               Icon(
-                                Icons.logout,size: height * 0.045,
+                                Icons.logout,size: height * 0.03,
                                 color: Color.fromARGB(255, 170, 170, 170),
                               ),
                               SizedBox(
