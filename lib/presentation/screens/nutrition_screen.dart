@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/nutrition_middleware.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/models/nutrition_donut_model.dart';
 import '../../data/models/search_meal_model.dart';
 import '../animations/animation_shimmer.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class NutritionScreen extends StatefulWidget {
   @override
   State<NutritionScreen> createState() => _NutritionScreenState();
@@ -17,7 +18,6 @@ class NutritionScreen extends StatefulWidget {
 
 class _NutritionScreenState extends State<NutritionScreen> {
   Future<List<FoodItem>>? _getFutureMeal;
-  SharedPrefsHelper prefs = SharedPrefsHelper();
   TextEditingController controller = TextEditingController();
   TextEditingController _quantityController = TextEditingController();
   String quantity = '1';

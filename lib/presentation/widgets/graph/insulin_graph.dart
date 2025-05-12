@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api/api_config.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/sharedpref_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
@@ -11,7 +10,9 @@ import '../../../data/providers/basal_delivery_provider.dart';
 import '../../../data/providers/bolus_delivery_provider.dart';
 import '../../../data/providers/glucose_provider.dart';
 import '../../../data/providers/smart_bolus_delivery_provider.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class ChartDataInfo {
   ChartDataInfo(this.time, this.value, [this.color]);
 
@@ -49,8 +50,8 @@ class _InsulinchartState extends State<Insulinchart> {
     final dio = Dio();
     String? filter;
 
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+
+    final String? userId = await _hivedb.getString('userId');
  if (period == "Week") {
       filter = 'weekly';
     } else if (period == "Month") {

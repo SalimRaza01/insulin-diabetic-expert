@@ -10,10 +10,11 @@ import '../../core/api/nutrition_middleware.dart';
 import '../../core/api/api_config.dart';
 import '../../core/services/bluetooth_service_provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/providers/glucose_provider.dart';
 import 'home_screen.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class ChartDataInfo {
   ChartDataInfo(this.time, this.value, [this.color]);
 
@@ -753,7 +754,6 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
   int currentIndex = 0;
   String? totaldeliveredDosage;
   double initialInsulinValue = 0.0;
-  final prefs = SharedPrefsHelper();
 
   @override
   void initState() {
@@ -764,7 +764,7 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
 
   Future<void> _saveInitialValue(double value) async {
     double updatedValue = initialInsulinValue + value;
-    await prefs.setDouble('dose', updatedValue);
+    await _hivedb.setDouble('dose', updatedValue);
     print('dosage updated');
     setState(() {
       initialInsulinValue = updatedValue;
@@ -772,7 +772,7 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
   }
 
   void _loadInitialValue() {
-    double? storedValue = prefs.getDouble('dose');
+    double? storedValue = _hivedb.getDouble('dose');
     setState(() {
       initialInsulinValue = storedValue ?? 0.0;
       print('initial value $initialInsulinValue');
@@ -792,8 +792,7 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
     }
 
     print(period.toLowerCase());
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     print(userId);
     final response = await dio.get(
       '$gluCoseData/$userId',
@@ -815,11 +814,11 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
         double deliveredDosage =
             chartData.fold(0, (sum, item) => sum + item.value);
         print('this is my Basal units $deliveredDosage');
-        _sharedPreference.putString(
+        _hivedb.putString(
             'totalDeliveredDosage', deliveredDosage.toString());
 
         totaldeliveredDosage =
-            _sharedPreference.getString('totalDeliveredDosage');
+            _hivedb.getString('totalDeliveredDosage');
       });
     } else {
       print('Failed to load data');
@@ -1734,7 +1733,6 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
   }
 
   selectedBUtton(text) {
-    final pref = SharedPrefsHelper();
     if (_selectedtext == text) {
       activeColor = Colors.green;
     } else {
@@ -1747,7 +1745,7 @@ class _MainScreenGlucoseState extends State<MainScreenGlucose> {
           _selectedtext = text;
           selected = text;
           print('this is selected text $_selectedtext and this is text $text');
-          totaldeliveredDosage = pref.getString('totalDeliveredDosage');
+          totaldeliveredDosage = _hivedb.getString('totalDeliveredDosage');
         });
       },
       child: Container(

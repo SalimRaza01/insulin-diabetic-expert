@@ -1,19 +1,22 @@
-// ignore_for_file: file_names, prefer_const_constructors, prefer_const_literals_to_create_immutables, unnecessary_new
+// ignore_for_file: file_names, prefer_const_literals_to_create_immutables, unnecessary_new
 
 import 'dart:async';
+import 'package:INSUL/data/providers/device_provider.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:INSUL/presentation/screens/glucose_screen.dart';
 import 'package:INSUL/presentation/screens/smartbolus_screen.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 import '../../core/api/api_config.dart';
 import '../../core/services/bluetooth_service_provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/providers/nutrition_provider.dart';
 import '../animations/animation_shimmer.dart';
 import '../widgets/bettery_widget.dart';
@@ -31,6 +34,9 @@ import 'bolus_screen.dart';
 import 'insulin_screen.dart';
 import 'nutrition_screen.dart';
 import 'weight_screen.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
+
+final _hivedb = HiveDbHelper();
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -43,23 +49,22 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<String> periods = ['24 Hours', 'Week', 'Month'];
   int currentIndex = 0;
   late Future<List<ExpenseData>> chartData;
-  final pref = SharedPrefsHelper();
   final BleManager _bleManager = BleManager();
+  bool isQRScanning = false;
 
   Future<void> getUserDetails() async {
     print('API HIT');
-    final _sharedPreference = SharedPrefsHelper();
     final dio = Dio();
 
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     print('$getprofile/$userId');
 
     final response = await dio.get('$getprofile/$userId');
 
     if (response.statusCode == 200) {
       var data = response.data['data'];
-      SharedPrefsHelper().putString('firstName', data['firstName']);
-      SharedPrefsHelper().putString('lastName', data['lastName']);
+      _hivedb.putString('firstName', data['firstName']);
+      _hivedb.putString('lastName', data['lastName']);
     } else {
       throw Exception('Failed to load profile data: ${response.statusCode}');
     }
@@ -68,21 +73,67 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _bleManager.initializeBluetoothListeners();
-    _bleManager.agvaDevice.addListener(_onDeviceFound);
 
+    if (_hivedb.getBool('DeviceSetup') == true) {
+
+      _bleManager.agvaDevice.addListener(_onDeviceFound);
+    } else {}
     getUserDetails();
     chartData = _fetchChartData(periods[currentIndex]);
   }
 
+
+//unused code as per new condition
   void _onDeviceFound() {
     if (_bleManager.agvaDevice.value != null) {
       popupDevice(context, _bleManager.agvaDevice.value!, _bleManager);
     }
   }
 
+  Future<void> _requestCameraPermission() async {
+    var status = await Permission.camera.status;
+    if (!status.isGranted) {
+      status = await Permission.camera.request();
+    }
+
+    if (status.isGranted) {
+      _startScanner();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text('Camera permission is required to scan QR codes.')),
+      );
+    }
+  }
+
+  void _startScanner() {
+    setState(() => isQRScanning = true);
+  }
+
+  void _stopScanner() {
+    setState(() => isQRScanning = false);
+  }
+
+  void _onQRDetected(Barcode barcode, BuildContext context) async {
+    final deviceName = barcode.rawValue;
+
+    if (deviceName == 'INSUL-AGVA') {
+      _hivedb.putString('device_name', deviceName!);
+      Provider.of<DeviceProvider>(context, listen: false)
+          .updateDeviceName(deviceName);
+      _stopScanner();
+
+      await Future.delayed(const Duration(seconds: 2));
+      _bleManager.initializeBluetoothListeners();
+      // Navigator.of(context).pop();
+      // BleManager().startScanIfNotScanning();
+    }
+  }
+
   @override
   void dispose() {
+
+//unused code as per new condition
     _bleManager.agvaDevice.removeListener(_onDeviceFound);
     super.dispose();
   }
@@ -119,8 +170,8 @@ class _HomeScreenState extends State<HomeScreen> {
       throw Exception('Invalid period');
     }
 
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final _hivedb = HiveDbHelper();
+    final String? userId = await _hivedb.getString('userId');
 
     final response = await dio.get(
       '$nutritionalData/$userId',
@@ -146,8 +197,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return Consumer<NutritionChartNotifier>(builder: (context, value, child) {
-      if (value.nutritionStatus == true) {
+    return Consumer<NutritionChartNotifier>(
+        builder: (context, nutritionNotifier, child) {
+      if (nutritionNotifier.nutritionStatus == true) {
         chartData = _fetchChartData(periods[currentIndex]);
         Provider.of<NutritionChartNotifier>(context, listen: false)
             .nutritionUpdate(false);
@@ -175,209 +227,217 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor:
                                 Theme.of(context).colorScheme.secondary,
                             actions: <Widget>[
-                              GestureDetector(
-                                onTap: () => {
-                                  if (adapterState == BluetoothAdapterState.off)
-                                    {
-                                      showModalBottomSheet<void>(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return Container(
-                                            height: height * 0.2,
-                                            decoration: BoxDecoration(
-                                                color: Color.fromARGB(
-                                                    255, 5, 53, 93)),
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(20),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Text(
-                                                        "Bluetooth is turned off",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                height * 0.022,
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                      SizedBox(
-                                                        height: height * 0.02,
-                                                      ),
-                                                      Text(
-                                                        "Please turn on your bluetooth to connect insulin ",
-                                                        style: TextStyle(
-                                                            fontSize:
-                                                                height * 0.012,
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  Icon(Icons.bluetooth_disabled,
-                                                      size: height * 0.04,
-                                                      color: Colors.white)
-                                                ],
-                                              ),
+                              InkWell(
+                                onTap: () async {
+                                  if (adapterState ==
+                                      BluetoothAdapterState.off) {
+                                    showModalBottomSheet<void>(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          height: height * 0.2,
+                                          decoration: BoxDecoration(
+                                              color: Color.fromARGB(
+                                                  255, 5, 53, 93)),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(20),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "Bluetooth is turned off",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              height * 0.022,
+                                                          color: Colors.white),
+                                                    ),
+                                                    SizedBox(
+                                                      height: height * 0.02,
+                                                    ),
+                                                    Text(
+                                                      "Please turn on your bluetooth to connect insulin ",
+                                                      style: TextStyle(
+                                                          fontSize:
+                                                              height * 0.012,
+                                                          color: Colors.white),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Icon(Icons.bluetooth_disabled,
+                                                    size: height * 0.04,
+                                                    color: Colors.white)
+                                              ],
                                             ),
-                                          );
-                                        },
-                                      ),
-                                    },
-                                  if (isConnected == false)
-                                    {
-                                      print(agvaDevice),
-                                      print(isConnected),
-                                      print("Device not connected"),
-                                      _bleManager.startScanIfNotScanning()
-                                    }
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else {
+                                    await _requestCameraPermission();
+                                  }
                                 },
-                                child: Image.asset(
-                                  isScanning == true
-                                      ? 'assets/images/scanning.gif'
-                                      : isConnected
-                                          ? 'assets/images/insulin_connected.png'
-                                          : 'assets/images/insulinIcon.png',
-                                  width: 25,
-                                ),
+                                child: Icon(CupertinoIcons.barcode_viewfinder),
                               ),
                               SizedBox(
                                 width: 25,
                               ),
-                              GestureDetector(
-                                onTap: _addBloodCount,
-                                child: Image.asset(
-                                  'assets/images/notifi.png',
-                                  height: 22,
-                                ),
+                            
+                              isScanning
+                                  ? Image.asset(
+                                      'assets/images/scanning.gif',
+                                      width: 20,
+                                    )
+                                  : Icon(isConnected
+                                      ? CupertinoIcons.rectangle_badge_checkmark
+                                      : CupertinoIcons.rectangle_badge_xmark),
+
+                              SizedBox(
+                                width: 25,
                               ),
+                              GestureDetector(
+                                  onTap: _addBloodCount,
+                                  child: Icon(CupertinoIcons.bell_fill)),
                               SizedBox(
                                 width: 20,
                               )
                             ],
                           ),
-                          body: SingleChildScrollView(
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Column(
-                                children: [
-                                  //Today's_Status_Widget
-                                  SizedBox(height: height * 0.020),
-                                  GestureDetector(child: TodaysStatus()),
+                          body: Stack(
+                            children: [
+                              SingleChildScrollView(
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15),
+                                  child: Column(
+                                    children: [
+                                      //Today's_Status_Widget
+                                      SizedBox(height: height * 0.020),
+                                      GestureDetector(child: TodaysStatus()),
 
-                                  SizedBox(height: height * 0.015),
-                                  //Avarage_Insulin_Intake_Widget
+                                      SizedBox(height: height * 0.015),
+                                      //Avarage_Insulin_Intake_Widget
 
-                                  GestureDetector(
-                                      onTap: () {
-                                        if (isConnected) {
+                                      GestureDetector(
+                                          onTap: () {
+                                            if (isConnected) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          SmartBolusScreen()));
+                                            } else {
+                                              _noDeviceFoundTopModel();
+                                            }
+                                          },
+                                          child: SmartBolusWidget()),
+
+                                      SizedBox(height: height * 0.015),
+                                      GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        NutritionScreen()));
+                                          },
+                                          child: newMethod(height, width)),
+
+                                      SizedBox(height: height * 0.015),
+
+                                      GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WeightScreen()));
+                                          },
+                                          child: WeightChart()),
+
+                                      SizedBox(height: height * 0.015),
+
+                                      //GlucoseChart_Widget
+                                      GestureDetector(
+                                          onTap: () {
+                                            if (isConnected) {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          GlucoseScreen()));
+                                            } else {
+                                              _noDeviceFoundTopModel();
+                                            }
+                                          },
+                                          child: Glucosechart()),
+
+                                      SizedBox(height: height * 0.015),
+                                      GestureDetector(
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        InsulinScreen()));
+                                          },
+                                          child: Insulinchart()),
+
+                                      SizedBox(height: height * 0.015),
+                                      //InsulinkChart_Widget
+                                      GestureDetector(
+                                        onTap: () {
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      SmartBolusScreen()));
-                                        } else {
-                                          _noDeviceFoundTopModel();
-                                        }
-                                      },
-                                      child: SmartBolusWidget()),
+                                                      BasalWizard()));
+                                        },
+                                        child: Basalgraph(),
+                                      ),
+                                      SizedBox(height: height * 0.015),
 
-                                  SizedBox(height: height * 0.015),
-                                  GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    NutritionScreen()));
-                                      },
-                                      child: newMethod(height, width)),
-
-                                  SizedBox(height: height * 0.015),
-
-                                  GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    WeightScreen()));
-                                      },
-                                      child: WeightChart()),
-
-                                  SizedBox(height: height * 0.015),
-
-                                  //GlucoseChart_Widget
-                                  GestureDetector(
-                                      onTap: () {
-                                        if (isConnected) {
-                                          Navigator.push(
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
-                                                      GlucoseScreen()));
-                                        } else {
-                                          _noDeviceFoundTopModel();
-                                        }
-                                      },
-                                      child: Glucosechart()),
+                                                      BolusWizard()));
+                                        },
+                                        child: Bolusgraph(),
+                                      ),
+                                      SizedBox(height: height * 0.015),
 
-                                  SizedBox(height: height * 0.015),
-                                  GestureDetector(
-                                      onTap: () {
-                                        Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    InsulinScreen()));
-                                      },
-                                      child: Insulinchart()),
+                                      RessorvoirWidget(),
 
-                                  SizedBox(height: height * 0.015),
-                                  //InsulinkChart_Widget
-                                  GestureDetector(
-                                    onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BasalWizard()));
-                                    },
-                                    child: Basalgraph(),
+                                      SizedBox(height: height * 0.015),
+                                      //Bettery_Widget
+                                      BatteryStatus(),
+                                      SizedBox(height: height * 0.015),
+                                      //Patch_Widget
+                                    ],
                                   ),
-                                  SizedBox(height: height * 0.015),
-
-                                  GestureDetector(
-                                    onTap: () async {
-                                      await Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  BolusWizard()));
-                                    },
-                                    child: Bolusgraph(),
-                                  ),
-                                  SizedBox(height: height * 0.015),
-
-                                  RessorvoirWidget(),
-
-                                  SizedBox(height: height * 0.015),
-                                  //Bettery_Widget
-                                  BatteryStatus(),
-                                  SizedBox(height: height * 0.015),
-                                  //Patch_Widget
-                                ],
+                                ),
                               ),
-                            ),
+                              if (isQRScanning)
+                                Positioned.fill(
+                                  child: MobileScanner(
+                                    onDetect: (capture) {
+                                      for (final barcode in capture.barcodes) {
+                                        _onQRDetected(barcode, context);
+                                      }
+                                    },
+                                  ),
+                                ),
+                            ],
                           ),
                           drawer: AppDrawerNavigation('HOMESCREEN'),
                         );
@@ -574,6 +634,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+
+
+//unused code as per new condition
   Future<void> popupDevice(
       BuildContext context, BluetoothDevice device, BleManager bleManager) {
     print('POPUP Showen');
@@ -604,7 +667,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
-                            "AgVa Insul",
+                            _hivedb.getString('device_name')!,
                             style: TextStyle(
                               fontSize: height * 0.035,
                               fontWeight: FontWeight.w300,
@@ -798,8 +861,6 @@ class InsulinTopModel extends StatelessWidget {
     );
   }
 }
-
-
 
 final pilateColor = const Color.fromARGB(255, 255, 0, 92); // Fat
 final cyclingColor = const Color.fromARGB(255, 0, 156, 156); // Protein

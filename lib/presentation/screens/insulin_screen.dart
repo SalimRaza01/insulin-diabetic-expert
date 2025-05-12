@@ -3,10 +3,11 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 import '../../core/services/bluetooth_service_provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../widgets/graph/basal_graph.dart';
 import '../widgets/graph/bolus_graph.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class InsulinScreen extends StatefulWidget {
   const InsulinScreen({super.key, BluetoothDevice? agvaDevice});
 
@@ -23,7 +24,6 @@ class _InsulinScreenState extends State<InsulinScreen> {
   String _selectedText = 'Insulin';
   double? totalBasalunit;
   double? totalBolusunit;
-  final pref = SharedPrefsHelper();
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -42,8 +42,8 @@ class _InsulinScreenState extends State<InsulinScreen> {
   @override
   void initState() {
     super.initState();
-    totalBasalunit = double.parse(pref.getString('totalbasalvalue')!);
-    totalBolusunit = double.parse(pref.getString('totalbolusvalue')!);
+    totalBasalunit = double.parse(_hivedb.getString('totalbasalvalue')!);
+    totalBolusunit = double.parse(_hivedb.getString('totalbolusvalue')!);
     print(totalBasalunit);
     print(totalBolusunit);
 

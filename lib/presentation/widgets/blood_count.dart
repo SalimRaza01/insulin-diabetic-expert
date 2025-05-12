@@ -1,4 +1,4 @@
-import 'package:INSUL/core/utils/sharedpref_utils.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:flutter/material.dart';
 
 class BloodCount extends StatelessWidget {
@@ -7,8 +7,7 @@ class BloodCount extends StatelessWidget {
   final TextEditingController bloodCountController = TextEditingController();
 
   final TextEditingController bloodPressureController = TextEditingController();
-
-  final SharedPrefsHelper pref = SharedPrefsHelper();
+  final _hivedb = HiveDbHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -227,9 +226,9 @@ class BloodCount extends StatelessWidget {
                                                 width * 0.4, height * 0.05),
                                           ),
                                           onPressed: () {
-                                            pref.putString('BloodSugarCount',
+                                            _hivedb.putString('BloodSugarCount',
                                                 bloodCountController.text);
-                                            pref.putString('BloodPressure',
+                                            _hivedb.putString('BloodPressure',
                                                 bloodPressureController.text);
                                             Navigator.pop(
                                                 context, "Data Saved");

@@ -1,3 +1,4 @@
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:animated_icon/animated_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -5,9 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../../core/api/api_config.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/sharedpref_utils.dart';
-import '../../../data/providers/bolus_delivery_provider.dart';
 
+import '../../../data/providers/bolus_delivery_provider.dart';
+  final _hivedb = HiveDbHelper();
 class ChartDataInfo {
   ChartDataInfo(this.time, this.unit, [this.color]);
 
@@ -58,8 +59,7 @@ bool refreshActive = false;
     }
 
     print(period.toLowerCase());
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     final response = await dio.get(
       '$getBolusGraphData/$userId',
       queryParameters: {'filter': filter},
@@ -79,7 +79,7 @@ bool refreshActive = false;
                 if(filter == 'today'){
      double totalUnits = chartData.fold(0, (sum, item) => sum + item.unit);
       print('this is my Basal units $totalUnits');
-_sharedPreference.putString('totalbolusvalue', totalUnits.toString());
+_hivedb.putString('totalbolusvalue', totalUnits.toString());
         }
       });
     } else {

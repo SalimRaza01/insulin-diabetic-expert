@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:INSUL/presentation/screens/sign_in_screen.dart';
 import 'package:INSUL/presentation/screens/home_screen.dart';
-import '../../core/utils/sharedpref_utils.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
+
+  final _hivedb = HiveDbHelper();
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -11,7 +13,6 @@ class Splashscreen extends StatefulWidget {
 }
 
 class _SplashscreenState extends State<Splashscreen> {
-  final _sharedPref = SharedPrefsHelper();
 
   @override
   void initState() {
@@ -21,7 +22,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
     Future.delayed(Duration(seconds: 3), () {
   
-      if (_sharedPref.getBool('isLoggedIn') == true) {
+      if (_hivedb.getBool('isLoggedIn') == true) {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       } else {

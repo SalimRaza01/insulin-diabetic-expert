@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/api_config.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../widgets/buttoms_widget.dart';
 import '../widgets/drawer_widget.dart';
 import '../widgets/graph/basal_graph.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class BasalHistory {
   final String basal;
   final DateTime starttime;
@@ -55,7 +56,6 @@ class _BasalWizardState extends State<BasalWizard> {
   bool isDosageEditable = false;
   late TimeLinkedList timeLinkedList;
   double initialInsulinValue = 0.0;
-  final prefs = SharedPrefsHelper();
 
   void toggleDosageEdit() {
     setState(() {
@@ -68,7 +68,7 @@ class _BasalWizardState extends State<BasalWizard> {
 
   Future<void> _saveInitialValue(double value) async {
     double updatedValue = initialInsulinValue + value;
-    await prefs.setDouble('dose', updatedValue);
+    await _hivedb.setDouble('dose', updatedValue);
     print('dosage updated');
     setState(() {
       initialInsulinValue = updatedValue;
@@ -76,7 +76,7 @@ class _BasalWizardState extends State<BasalWizard> {
   }
 
   void _loadInitialValue() {
-    double? storedValue = prefs.getDouble('dose');
+    double? storedValue = _hivedb.getDouble('dose');
     setState(() {
       initialInsulinValue = storedValue ?? 0.0;
       print(initialInsulinValue);
@@ -84,7 +84,7 @@ class _BasalWizardState extends State<BasalWizard> {
   }
 
   Future<void> _loadbasalHistory() async {
-    final String? doseHistoryString = prefs.getString('basalHistorylist');
+    final String? doseHistoryString = _hivedb.getString('basalHistorylist');
     if (doseHistoryString != null) {
       final List<dynamic> doseHistoryJson = jsonDecode(doseHistoryString);
       print('history $doseHistoryString');
@@ -98,11 +98,11 @@ class _BasalWizardState extends State<BasalWizard> {
   Future<void> _saveBasalHistory() async {
     final String doseHistoryString =
         jsonEncode(basalHistorylist.map((entry) => entry.toJson()).toList());
-    await prefs.putString('basalHistorylist', doseHistoryString);
+    await _hivedb.putString('basalHistorylist', doseHistoryString);
   }
 
   Future<void> _deleteSharedPreference() async {
-    await prefs.remove('basalHistorylist');
+    await _hivedb.remove('basalHistorylist');
     _notifyUser('History Deleted');
   }
 

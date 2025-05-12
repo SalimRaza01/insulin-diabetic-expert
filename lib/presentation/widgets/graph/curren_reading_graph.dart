@@ -1,12 +1,13 @@
 
+import 'package:intl/intl.dart';
 import 'package:animated_icon/animated_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api/api_config.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/sharedpref_utils.dart';
-import 'package:intl/intl.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class TodaysStatus extends StatefulWidget {
   const TodaysStatus({Key? key});
 
@@ -23,8 +24,7 @@ bool refreshActive = false;
 
   Future<void> getCurrentData() async {
     final dio = Dio();
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     print(' user $userId');
     try {
       final response = await dio.get(

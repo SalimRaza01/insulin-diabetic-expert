@@ -1,7 +1,7 @@
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:dio/dio.dart';
 import '../../data/models/nutrition_donut_model.dart';
 import '../../data/models/search_meal_model.dart';
-import '../utils/sharedpref_utils.dart';
 import 'api_config.dart';
 
 Future<List<FoodItem>> fetchFoodItem(String foodName) async {
@@ -26,8 +26,8 @@ Future<List<NutritionDonutDataItem>> fetchNutritionDonutData(
     String filterName) async {
   print('coming filtername $filterName');
   final dio = Dio();
-      final _sharedPreference = SharedPrefsHelper();
- final String? userId = await _sharedPreference.getString('userId');
+     final _hivedb = HiveDbHelper();
+ final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.get(
       '$fetchNutritionDataChart/$userId',

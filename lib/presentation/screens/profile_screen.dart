@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../core/api/api_service.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/providers/profile_updated_provider.dart';
 import '../animations/animation_shimmer.dart';
 import '../widgets/drawer_widget.dart';
@@ -11,7 +10,9 @@ import 'dart:io';
 import 'package:provider/provider.dart';
 
 import 'update_profile_screen.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -21,7 +22,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   List<String> genderList = ['Male', 'Female'];
   List<String> diabetesList = ['Diabetes', 'HyperTension'];
   String selectedGender = 'Select Gender';
-  SharedPrefsHelper pref = SharedPrefsHelper();
+
   bool showPassword = false;
   bool isEditMode = false;
   bool hyperTension2 = false;
@@ -48,8 +49,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _loadProfileImage() async {
-    filepath = await SharedPrefsHelper().getString('profileImage');
-    print(SharedPrefsHelper().getString('profileImage'));
+    filepath = await _hivedb.getString('profileImage');
+    print(_hivedb.getString('profileImage'));
 
     setState(() {
       _image = File(filepath!);
@@ -74,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _image = File(pickedFile.path);
           filepath = pickedFile.path;
         });
-        await SharedPrefsHelper().putImageFile('profileImage', _image!);
+        await _hivedb.putImageFile('profileImage', _image!);
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           filepath = pickedFile.path;
           print('this is my set image $_image');
         });
-        await SharedPrefsHelper().putString('profileImage', filepath!);
+        await _hivedb.putString('profileImage', filepath!);
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -162,7 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   // setState(() {
                   //   _image = null;
                   // });
-                  //  SharedPrefsHelper()
+                  //  _hivedb
                   //     .putImageFile('profileImage', _image!);
 
                     Navigator.of(context).pop();

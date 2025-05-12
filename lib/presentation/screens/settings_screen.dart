@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/providers/theme_provider.dart';
 import '../widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +12,9 @@ import 'notification_screen.dart';
 import 'privacy_policy_screen.dart';
 import 'splash_screen.dart';
 import 'terms&condition_screen.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class SettingsScreen extends StatefulWidget {
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
@@ -21,7 +22,6 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   bool toggleDarkmode = false;
-  SharedPrefsHelper prefs = SharedPrefsHelper();
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   File? _image;
 
@@ -43,12 +43,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void logout(BuildContext context) async {
-    SharedPrefsHelper prefs = await SharedPrefsHelper();
-    await prefs.putBool("isLoggedIn", false);
-    prefs.putBool('isProfileCompleted', false);
-    prefs.putBool('isDeviceSetup', false);
-    prefs.putBool('darkMode', false);
-    prefs.putImageFile('profileImage', _image!);
+
+    await _hivedb.putBool("isLoggedIn", false);
+    _hivedb.putBool('isProfileCompleted', false);
+    _hivedb.putBool('isDeviceSetup', false);
+    _hivedb.putBool('darkMode', false);
+    _hivedb.putImageFile('profileImage', _image!);
   }
 
   @override
@@ -159,7 +159,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       
                                     onToggle: (value) {
                                       setState(() {
-                                        prefs.putBool('darkMode', value);
+                                        _hivedb.putBool('darkMode', value);
                                         context
                                             .read<ThemeNotifier>()
                                             .isDarkMode = value;

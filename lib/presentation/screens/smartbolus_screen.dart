@@ -6,14 +6,15 @@ import '../../core/api/api_service.dart';
 import '../../core/api/nutrition_middleware.dart';
 import '../../core/services/bluetooth_service_provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/models/search_meal_model.dart';
 import '../../data/providers/smart_bolus_delivery_provider.dart';
 import '../animations/animation_shimmer.dart';
 import '../widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:virtual_keyboard_multi_language/virtual_keyboard_multi_language.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class SmartBolusScreen extends StatefulWidget {
   @override
   State<SmartBolusScreen> createState() => _SmartBolusScreenState();
@@ -23,7 +24,6 @@ class _SmartBolusScreenState extends State<SmartBolusScreen>
     with SingleTickerProviderStateMixin {
   final BleManager _bleManager = BleManager();
   double initialInsulinValue = 0.0;
-  final pref = SharedPrefsHelper();
   Future<List<FoodItem>>? _getFutureMeal;
   final TextEditingController _searchMealController = TextEditingController();
   Future<List<FoodItem>>? _postFutureMeal;
@@ -70,14 +70,14 @@ class _SmartBolusScreenState extends State<SmartBolusScreen>
   @override
   void initState() {
     super.initState();
-    weight = pref.getString('weight')!;
+    weight = _hivedb.getString('weight')!;
     _loadMeals();
     _loadInitialValue();
   }
 
   Future<void> _saveInitialValue(double value) async {
     double updatedValue = initialInsulinValue + value;
-    await pref.setDouble('dose', updatedValue);
+    await _hivedb.setDouble('dose', updatedValue);
     print('dosage updated');
     setState(() {
       initialInsulinValue = updatedValue;
@@ -85,7 +85,7 @@ class _SmartBolusScreenState extends State<SmartBolusScreen>
   }
 
   void _loadInitialValue() {
-    double? storedValue = pref.getDouble('dose');
+    double? storedValue = _hivedb.getDouble('dose');
     setState(() {
       initialInsulinValue = storedValue ?? 0.0;
     });

@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/api/api_service.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import '../../core/utils/popover_bottomsheet.dart';
@@ -64,7 +63,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
   late String gender;
   late bool hyperTension2;
   late bool diabetes2;
-  SharedPrefsHelper pref = SharedPrefsHelper();
+
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
   TextEditingController ageController = TextEditingController();

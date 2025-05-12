@@ -1,3 +1,4 @@
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:animated_icon/animated_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -6,8 +7,9 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../core/api/api_config.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/sharedpref_utils.dart';
 import '../../../data/providers/basal_delivery_provider.dart';
+
+  final _hivedb = HiveDbHelper();
 
 class ChartDataInfo {
   ChartDataInfo(this.time, this.value, [this.color]);
@@ -41,8 +43,7 @@ class _BasalgraphState extends State<Basalgraph> {
     final dio = Dio();
     String? filter;
 
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
 
     if (period == "Today") {
       filter = 'today';
@@ -76,7 +77,7 @@ class _BasalgraphState extends State<Basalgraph> {
           double totalUnits =
               chartData.fold(0, (sum, item) => sum + item.value);
           print('this is my Basal units $totalUnits');
-          _sharedPreference.putString('totalbasalvalue', totalUnits.toString());
+          _hivedb.putString('totalbasalvalue', totalUnits.toString());
         }
       });
     } else {

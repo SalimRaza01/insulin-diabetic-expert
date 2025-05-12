@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import 'package:pinput/pinput.dart';
 import 'package:provider/provider.dart';
 
 import '../../data/providers/auth_provider.dart';
 import 'home_screen.dart';
 import 'setup_profile_screen.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class SigninOTP extends StatefulWidget {
   final String controller;
 
@@ -21,7 +22,6 @@ class SigninOTP extends StatefulWidget {
 class _SigninOTPState extends State<SigninOTP> {
   late final TextEditingController pinController;
   late final FocusNode focusNode;
-  final pref = SharedPrefsHelper();
   bool showerror = false;
   late String controller = '';
   late Timer _resendTimer;
@@ -141,7 +141,7 @@ class _SigninOTPState extends State<SigninOTP> {
                     padding: const EdgeInsets.all(8.0),
                     child: Center(
                       child: Text(
-                        '${pref.getString('message')}',
+                        '${_hivedb.getString('message')}',
                         style: TextStyle(
                           fontSize: showerror ? height * 0.015 : 0.0,
                           color: Colors.white,
@@ -256,13 +256,13 @@ class _SigninOTPState extends State<SigninOTP> {
                           await otpProvider.otpverify(pin);
 
                          Future.delayed(Duration(milliseconds: 1500),(){
-                           if (pref.getBool("isLoggedIn") == true) {
+                           if (_hivedb.getBool("isLoggedIn") == true) {
                             if (_resendTimer.isActive) {
                               _resendTimer.cancel();
                               print("timer cancelled");
                             }
-                            pref.putString('loginSource', widget.controller);
-                            if (pref.getBool("isProfileCompleted") == true && pref.getBool('isDeviceSetup') == true) {
+                            _hivedb.putString('loginSource', widget.controller);
+                            if (_hivedb.getBool("isProfileCompleted") == true && _hivedb.getBool('isDeviceSetup') == true) {
                               Navigator.pushAndRemoveUntil(
                                   context,
                                   MaterialPageRoute(
@@ -325,13 +325,13 @@ class _SigninOTPState extends State<SigninOTP> {
                       onTap: () async {
                         // await otpProvider.otpverify();
 
-                        if (pref.getBool("isLoggedIn") == true) {
+                        if (_hivedb.getBool("isLoggedIn") == true) {
                           if (_resendTimer.isActive) {
                             _resendTimer.cancel();
                             print("timer cancelled");
                           }
-                          pref.putString('loginSource', widget.controller);
-                          if (pref.getBool("isProfileCompleted") == true) {
+                          _hivedb.putString('loginSource', widget.controller);
+                          if (_hivedb.getBool("isProfileCompleted") == true) {
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(

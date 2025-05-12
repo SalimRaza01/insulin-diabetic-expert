@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/api/api_service.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/utils/popover_bottomsheet.dart';
 import '../../data/models/city_model.dart';
 import '../../data/models/state_model.dart';
 import '../widgets/slider_widget.dart';
-import 'device_setup_screen.dart';
+import '../device_setup/device_setup_screen.dart';
+
 
 List<String> genderList = ['Male', 'Female'];
 List<String> diabetesList = ['Diabetes', 'HyperTension'];
@@ -23,7 +23,6 @@ class SetupProfile extends StatefulWidget {
 }
 
 class _SetupProfileState extends State<SetupProfile> {
-  SharedPrefsHelper pref = SharedPrefsHelper();
   TextEditingController heightController = TextEditingController();
   TextEditingController weightController = TextEditingController();
   TextEditingController ageController = TextEditingController();

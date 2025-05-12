@@ -6,11 +6,12 @@ import 'dart:convert';
 import '../../core/api/api_service.dart';
 import '../../core/services/bluetooth_service_provider.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../widgets/buttoms_widget.dart';
 import '../widgets/drawer_widget.dart';
 import '../widgets/graph/bolus_graph.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class DoseEntry {
   final double dose;
   final DateTime timestamp;
@@ -45,7 +46,7 @@ class _BolusWizardState extends State<BolusWizard> {
   String char = 'beb5483e-36e1-4688-b7f5-ea07361b26a8';
   String cmd = 'cm+sync';
   List<DoseEntry> doseHistory = [];
-  final prefs = SharedPrefsHelper();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   double initialInsulinValue = 0.0;
 
@@ -71,7 +72,7 @@ class _BolusWizardState extends State<BolusWizard> {
 
   Future<void> _saveInitialValue(double value) async {
     double updatedValue = initialInsulinValue + value;
-    await prefs.setDouble('dose', updatedValue);
+    await _hivedb.setDouble('dose', updatedValue);
     print('dosage updated');
     setState(() {
       initialInsulinValue = updatedValue;
@@ -79,14 +80,14 @@ class _BolusWizardState extends State<BolusWizard> {
   }
 
   void _loadInitialValue() {
-    double? storedValue = prefs.getDouble('dose');
+    double? storedValue = _hivedb.getDouble('dose');
     setState(() {
       initialInsulinValue = storedValue ?? 0.0;
     });
   }
 
   Future<void> _loadDoseHistory() async {
-    final String? doseHistoryString = prefs.getString('doseHistory');
+    final String? doseHistoryString = _hivedb.getString('doseHistory');
     if (doseHistoryString != null) {
       final List<dynamic> doseHistoryJson = jsonDecode(doseHistoryString);
       setState(() {
@@ -103,11 +104,11 @@ class _BolusWizardState extends State<BolusWizard> {
   Future<void> _saveDoseHistory() async {
     final String doseHistoryString =
         jsonEncode(doseHistory.map((entry) => entry.toJson()).toList());
-    await prefs.putString('doseHistory', doseHistoryString);
+    await _hivedb.putString('doseHistory', doseHistoryString);
   }
 
   Future<void> _deleteSharedPreference() async {
-    await prefs.remove('doseHistory');
+    await _hivedb.remove('doseHistory');
 
     _notifyUser('History Deleted');
   }

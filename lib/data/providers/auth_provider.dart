@@ -1,12 +1,14 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import '../../core/api/api_config.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../presentation/screens/otp_screen.dart';
 
-
+import 'package:INSUL/core/utils/hive_db_utils.dart';
+  final _hivedb = HiveDbHelper();
+  
 class AuthProvider with ChangeNotifier {
   Future<void> login(String controller, BuildContext context) async {
     try {
@@ -54,7 +56,7 @@ class ResendOtp with ChangeNotifier {
 }
 
 class OtpProvider with ChangeNotifier {
-  final _sharedPreference = SharedPrefsHelper();
+
 
   Future<void> otpverify(
     String otpFields,
@@ -70,18 +72,18 @@ class OtpProvider with ChangeNotifier {
         bool isProfileCompleted = data['data']['isProfileCompleted'];
         bool isDeviceSetup = data['data']['isDeviceSetup'];
 
-        _sharedPreference.putString('userId', id);
-        _sharedPreference.putBool("isLoggedIn", true);
-        _sharedPreference.putBool('isProfileCompleted', isProfileCompleted);
-        _sharedPreference.putBool('isDeviceSetup', isDeviceSetup);
-        _sharedPreference.putString('weight', data['data']['weight']);
+        _hivedb.putString('userId', id);
+        _hivedb.putBool("isLoggedIn", true);
+        _hivedb.putBool('isProfileCompleted', isProfileCompleted);
+        _hivedb.putBool('isDeviceSetup', isDeviceSetup);
+        _hivedb.putString('weight', data['data']['weight']);
 
         print('successfull');
       } else {
         var data = jsonDecode(response.body);
         String message = data["message"];
 
-        _sharedPreference.putString('message', message);
+        _hivedb.putString('message', message);
 
         print(message);
         print('failed');

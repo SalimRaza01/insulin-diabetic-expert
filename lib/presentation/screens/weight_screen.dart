@@ -8,13 +8,14 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/api_config.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../../data/models/weight_model.dart';
 import '../../data/providers/weight_provider.dart';
 import '../animations/animation_shimmer.dart';
 import '../widgets/slider_widget.dart';
 import '../widgets/graph/weight_graph.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class WeightTargetHistory {
   final double setweight;
   final DateTime selectedDate;
@@ -45,7 +46,6 @@ class WeightScreen extends StatefulWidget {
 
 class _WeightScreenState extends State<WeightScreen> {
   Future<List<WeightPostData>>? _weightHistory;
-  final pref = SharedPrefsHelper();
   int currentIndex = 0;
   WeightType weightType = WeightType.kg;
   double? tempWeight;
@@ -79,8 +79,7 @@ class _WeightScreenState extends State<WeightScreen> {
     }
 
     print(period.toLowerCase());
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     final response = await dio.get(
       '$getWeightChartData/$userId',
       queryParameters: {'filter': filter},
@@ -107,7 +106,7 @@ class _WeightScreenState extends State<WeightScreen> {
   void initState() {
     getLastWeight();
     _weightHistory = fetchWeightHistory();
-    tempWeight = double.parse(pref.getString('weight')!);
+    tempWeight = double.parse(_hivedb.getString('weight')!);
     print('weight from shared $tempWeight');
     _fetchChartData(periods[currentIndex]);
 

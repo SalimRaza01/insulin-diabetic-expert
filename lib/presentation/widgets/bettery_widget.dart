@@ -61,16 +61,6 @@ class BatteryStatus extends StatelessWidget {
                     ],
                   ),
                 ),
-                // Container(
-                //     decoration: BoxDecoration(color: Colors.green[800]),
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(5),
-                //       child: Text(
-                //         'Sufficient',
-                //         style: TextStyle(
-                //            fontSize: height * 0.015, color: Theme.of(context).colorScheme.primary, fontWeight: FontWeight.bold),
-                //       ),
-                //     ))
               ],
             ),
             SizedBox(height: height * 0.02),
@@ -83,7 +73,7 @@ class BatteryStatus extends StatelessWidget {
                       Container(
                         height: height * 0.15,
                         width: width * 0.10,
-                        child: BatteryIndicator(batteryLevel: 0.15),
+                        child: BatteryIndicator(batteryLevel: 0.5),
 
                         // Image.asset(
                         //   "assets/images/BetteryIcon.png",

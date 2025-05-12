@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../../core/api/api_config.dart';
 import '../../core/theme/app_colors.dart';
-import '../../core/utils/sharedpref_utils.dart';
 import '../widgets/drawer_widget.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:intl/intl.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
+
+  final _hivedb = HiveDbHelper();
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
 
@@ -38,8 +40,7 @@ class _ReportScreenState extends State<ReportScreen> {
 
   Future<void> getReportDetails(String filterName) async {
     final dio = Dio();
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     try {
       final response = await dio.get(
         '$getReportData/$userId',

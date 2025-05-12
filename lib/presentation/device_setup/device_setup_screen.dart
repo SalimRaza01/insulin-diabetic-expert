@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -18,6 +19,7 @@ class DeviceSetupScreen extends StatefulWidget {
 }
 
 class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
+  final _hivedb = HiveDbHelper();
   List<BluetoothService> _services = [];
   final BleManager _bleManager = BleManager();
   BluetoothAdapterState _adapterState = BluetoothAdapterState.unknown;
@@ -268,7 +270,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
                         ),
                         if (_isScanning)
                           Text(
-                            connecting ? ' Connecting..' : 'Looking for Insul',
+                            connecting ? ' Connecting..' : 'Looking for ${_hivedb.getString('device_name')}',
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontWeight: FontWeight.bold,
@@ -316,7 +318,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
                           height: 20,
                         ),
                         Text(
-                          'Make sure your INSULIN DEVICE is turned on',
+                          'Make sure your device is powered on and nearby.',
                           style: TextStyle(
                               color: Theme.of(context).colorScheme.primary,
                               fontSize: 14,
@@ -353,7 +355,7 @@ class _DeviceSetupScreenState extends State<DeviceSetupScreen> {
                                   });
                                 },
                                 child: Text(
-                                  'How to connect AgVa Insul',
+                                  'How to connect',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.w300,

@@ -1,5 +1,7 @@
 
 
+import 'package:INSUL/core/utils/hive_db_utils.dart';
+import 'package:INSUL/presentation/screens/home_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -15,14 +17,15 @@ import '../../data/providers/nutrition_provider.dart';
 import '../../data/providers/profile_updated_provider.dart';
 import '../../data/providers/smart_bolus_delivery_provider.dart';
 import '../../data/providers/weight_provider.dart';
-import '../utils/sharedpref_utils.dart';
 import 'api_config.dart';
+
+  final _hivedb = HiveDbHelper();
 
 Future<void> addMeal(FoodItem foodItem, String text, double newCarbs,
     double carbs, BuildContext context) async {
   final dio = Dio();
-  final _sharedPreference = SharedPrefsHelper();
-  final String? userId = await _sharedPreference.getString('userId');
+
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post(
       postMealData,
@@ -69,10 +72,10 @@ Future<void> addMeal(FoodItem foodItem, String text, double newCarbs,
 }
 
 Future<List<FoodItem>> getMeal() async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   if (userId == null) {
     throw Exception('User ID not found in shared preferences');
   }
@@ -149,9 +152,9 @@ Future<void> updateQuantity(
 }
 
 Future<void> addWeight(String tempWeight, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post(postWeightData, data: {
       'userId': userId,
@@ -171,10 +174,10 @@ Future<void> addWeight(String tempWeight, BuildContext context) async {
 }
 
 Future<List<WeightPostData>> fetchWeightHistory() async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   if (userId == null) {
     throw Exception('User ID not found in shared preferences');
   }
@@ -214,10 +217,10 @@ Future<void> setUpProfileApi(
   String? phoneController,
   BuildContext context
 ) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
 
   print(userId);
   try {
@@ -239,13 +242,18 @@ Future<void> setUpProfileApi(
     });
     print(response);
     print('api  hit');
-    _sharedPreference.putBool('DeviceSetup', false);
+    _hivedb.putBool('DeviceSetup', false);
     if (response.statusCode == 200) {
-      _sharedPreference.putBool('isProfileCompleted', isProfileCompleted!);
-      _sharedPreference.putString('weight', weightController!);
+      _hivedb.putBool('isProfileCompleted', isProfileCompleted!);
+      _hivedb.putString('weight', weightController!);
       Provider.of<ProfileUpdateNotifier>(context,
                                       listen: false)
                                   .updateProfile(true);
+                                           Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            HomeScreen()));
       print(response);
     } else if (response.statusCode == 400) {
       print('api not hit');
@@ -259,10 +267,10 @@ Future<void> setUpProfileApi(
 
 Future<ProfileModel> getProfileData() async {
   print('API HIT');
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   print('$getprofile/$userId');
 
   final response = await dio.get('$getprofile/$userId');
@@ -281,17 +289,17 @@ Future<ProfileModel> getProfileData() async {
 }
 
 Future<void> addBolusUnit(String unit, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post('$postBolusUnit/$userId', data: {
       'unit': unit,
     });
     if (response.statusCode == 200) {
       insulinUnit(unit, context);
-      // insulinUnit(_sharedPreference.getDouble('dose').toString(), context);
+      // insulinUnit(_hivedb.getDouble('dose').toString(), context);
 
       Provider.of<Bolusdelivery>(context, listen: false).updateStatus(true);
 
@@ -306,10 +314,10 @@ Future<void> addBolusUnit(String unit, BuildContext context) async {
 
 Future<void> deviceSetup(bool status, BuildContext context) async {
 
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
       
 
     final response = await dio.put('$postSetupDevice/$userId', data: {
@@ -325,10 +333,10 @@ Future<void> deviceSetup(bool status, BuildContext context) async {
 }
 
 Future<void> addGlucoseUnit(String unit, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post('$postGlucoseUnit/$userId', data: {
       'unit': unit,
@@ -382,9 +390,9 @@ Future<List<Citymodel>> getCityList(state) async {
 
 Future<void> addBasal(
     String endTimeController, String unit, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   print('unit');
   try {
     final response = await dio.post('$postBasalData/$userId', data: {
@@ -406,27 +414,27 @@ Future<void> addBasal(
 
 void getLastWeight() async {
   print('API HIT');
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
 
   final response = await dio.get('$lastWeight/$userId');
 
   if (response.statusCode == 200) {
     var data = response.data['data'][0]['weight'];
     print('weight list ${data}');
-    _sharedPreference.putString('weight', data.toString());
+    _hivedb.putString('weight', data.toString());
   } else {
     throw Exception('Failed to load profile data: ${response.statusCode}');
   }
 }
 
 Future<void> smartBolusApi(String unit, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post('$smartBolusPost/$userId', data: {
       'unit': unit,
@@ -446,10 +454,10 @@ Future<void> smartBolusApi(String unit, BuildContext context) async {
 }
 
 Future<void> insulinUnit(String unit, BuildContext context) async {
-  final _sharedPreference = SharedPrefsHelper();
+
   final dio = Dio();
 
-  final String? userId = await _sharedPreference.getString('userId');
+  final String? userId = await _hivedb.getString('userId');
   try {
     final response = await dio.post('$postInsulinData/$userId', data: {
       'unit': unit,

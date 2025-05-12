@@ -4,12 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api/api_config.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../core/utils/sharedpref_utils.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../../data/providers/weight_provider.dart';
+import 'package:INSUL/core/utils/hive_db_utils.dart';
 
+  final _hivedb = HiveDbHelper();
 class WeightChart extends StatefulWidget {
   const WeightChart({Key? key}) : super(key: key);
 
@@ -46,8 +47,7 @@ class _WeightChartState extends State<WeightChart> {
     }
 
     print(period.toLowerCase());
-    final _sharedPreference = SharedPrefsHelper();
-    final String? userId = await _sharedPreference.getString('userId');
+    final String? userId = await _hivedb.getString('userId');
     final response = await dio.get(
       '$getWeightChartData/$userId',
       queryParameters: {'filter': filter},
