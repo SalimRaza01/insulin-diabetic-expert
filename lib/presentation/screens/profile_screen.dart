@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import '../../core/api/api_service.dart';
 import '../../data/providers/profile_updated_provider.dart';
 import '../animations/animation_shimmer.dart';
@@ -12,7 +13,8 @@ import 'package:provider/provider.dart';
 import 'update_profile_screen.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 
-  final _hivedb = HiveDbHelper();
+final _hivedb = HiveDbHelper();
+
 class ProfileScreen extends StatefulWidget {
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -159,15 +161,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     color: Colors.red,
                   ),
                 ),
-                onTap: ()  {
+                onTap: () {
                   // setState(() {
                   //   _image = null;
                   // });
                   //  _hivedb
                   //     .putImageFile('profileImage', _image!);
 
-                    Navigator.of(context).pop();
-                
+                  Navigator.of(context).pop();
                 },
               ),
             ),
@@ -233,15 +234,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: FutureBuilder(
                           future: getProfileData(),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return ShimmereffectProfile();
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return WithOutShimmerProfile(
+                                waiting: snapshot.connectionState ==
+                                    ConnectionState.waiting,
+                              );
                             } else if (snapshot.hasError) {
-                              return WithOutShimmerProfile();
+                              return WithOutShimmerProfile(
+                                waiting: snapshot.connectionState ==
+                                    ConnectionState.none,
+                              );
                             } else {
                               final items = snapshot.data!;
                               print('my profile data  ${items.age}');
-
+                      
                               firstNameController.text =
                                   items.firstName.toString();
                               lastNameController.text =
@@ -257,15 +263,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               selectedGender = items.gender.toString();
                               hyperTension2 = items.hypertension!;
                               diabetes2 = items.diabetes!;
-
+                      
                               return Column(
                                 children: [
                                   Container(
                                     width: width,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(16),
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
@@ -375,13 +382,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 8, left: 15, right: 15),
+                                                  top: 8,
+                                                  left: 15,
+                                                  right: 15),
                                               child: Column(
                                                 children: [
                                                   Text(
                                                     'Gender',
                                                     style: TextStyle(
-                                                      fontSize: height * 0.014,
+                                                      fontSize:
+                                                          height * 0.014,
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Theme.of(context)
@@ -401,7 +411,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         items.gender == 'Male'
                                                             ? 'assets/images/Male.png'
                                                             : 'assets/images/Female.png',
-                                                        height: height * 0.032,
+                                                        height:
+                                                            height * 0.032,
                                                       ),
                                                       Text(
                                                           items.gender!
@@ -410,12 +421,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               ? ' '
                                                               : items.gender!,
                                                           style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
+                                                              color: Theme
+                                                                      .of(
+                                                                          context)
                                                                   .colorScheme
                                                                   .secondaryContainer,
                                                               fontSize:
-                                                                  height * .015,
+                                                                  height *
+                                                                      .015,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500)),
@@ -437,13 +450,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 8, left: 15, right: 15),
+                                                  top: 8,
+                                                  left: 15,
+                                                  right: 15),
                                               child: Column(
                                                 children: [
                                                   Text(
                                                     'Height',
                                                     style: TextStyle(
-                                                      fontSize: height * 0.014,
+                                                      fontSize:
+                                                          height * 0.014,
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Theme.of(context)
@@ -463,7 +479,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                         items.gender == 'Male'
                                                             ? 'assets/images/Man.png'
                                                             : 'assets/images/Women.png',
-                                                        height: height * 0.035,
+                                                        height:
+                                                            height * 0.035,
                                                       ),
                                                       Column(
                                                         crossAxisAlignment:
@@ -514,13 +531,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 8, left: 15, right: 15),
+                                                  top: 8,
+                                                  left: 15,
+                                                  right: 15),
                                               child: Column(
                                                 children: [
                                                   Text(
                                                     'Weight',
                                                     style: TextStyle(
-                                                      fontSize: height * 0.014,
+                                                      fontSize:
+                                                          height * 0.014,
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Theme.of(context)
@@ -538,7 +558,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     children: [
                                                       Image.asset(
                                                         'assets/images/Vector.png',
-                                                        height: height * 0.035,
+                                                        height:
+                                                            height * 0.035,
                                                       ),
                                                       Column(
                                                         crossAxisAlignment:
@@ -598,13 +619,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 8, left: 20, right: 20),
+                                                  top: 8,
+                                                  left: 20,
+                                                  right: 20),
                                               child: Column(
                                                 children: [
                                                   Text(
                                                     'Date of Birth',
                                                     style: TextStyle(
-                                                      fontSize: height * 0.014,
+                                                      fontSize:
+                                                          height * 0.014,
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Theme.of(context)
@@ -622,16 +646,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     children: [
                                                       Image.asset(
                                                         'assets/images/Calenderr.png',
-                                                        height: height * 0.035,
+                                                        height:
+                                                            height * 0.035,
                                                       ),
                                                       Text(items.dob!,
                                                           style: TextStyle(
-                                                              color: Theme.of(
-                                                                      context)
+                                                              color: Theme
+                                                                      .of(
+                                                                          context)
                                                                   .colorScheme
                                                                   .secondaryContainer,
                                                               fontSize:
-                                                                  height * .015,
+                                                                  height *
+                                                                      .015,
                                                               fontWeight:
                                                                   FontWeight
                                                                       .w500))
@@ -653,13 +680,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ),
                                             child: Padding(
                                               padding: const EdgeInsets.only(
-                                                  top: 8, left: 20, right: 20),
+                                                  top: 8,
+                                                  left: 20,
+                                                  right: 20),
                                               child: Column(
                                                 children: [
                                                   Text(
                                                     'Diagnosis',
                                                     style: TextStyle(
-                                                      fontSize: height * 0.014,
+                                                      fontSize:
+                                                          height * 0.014,
                                                       fontWeight:
                                                           FontWeight.w300,
                                                       color: Theme.of(context)
@@ -677,7 +707,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                     children: [
                                                       Image.asset(
                                                         'assets/images/Diagnosis1.png',
-                                                        height: height * 0.035,
+                                                        height:
+                                                            height * 0.035,
                                                       ),
                                                       Column(
                                                         crossAxisAlignment:
@@ -698,10 +729,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .w500)),
-                                                          if (items
-                                                                  .hypertension ==
+                                                          if (items.hypertension ==
                                                               true)
-                                                            Text('Hypertension',
+                                                            Text(
+                                                                'Hypertension',
                                                                 style: TextStyle(
                                                                     color: Theme.of(
                                                                             context)
@@ -729,7 +760,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     height: height * 0.03,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(bottom: 70),
+                                    padding:
+                                        const EdgeInsets.only(bottom: 70),
                                     child: GestureDetector(
                                         onTap: () {
                                           Navigator.push(
@@ -743,12 +775,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                               .text,
                                                           dobController.text,
                                                           ageController.text,
-                                                          phoneController.text,
-                                                          emailController.text,
-                                                          stateController.text,
+                                                          phoneController
+                                                              .text,
+                                                          emailController
+                                                              .text,
+                                                          stateController
+                                                              .text,
                                                           cityController.text,
-                                                          heightController.text,
-                                                          weightController.text,
+                                                          heightController
+                                                              .text,
+                                                          weightController
+                                                              .text,
                                                           selectedGender,
                                                           hyperTension2,
                                                           diabetes2)));
@@ -791,8 +828,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           decoration: BoxDecoration(
                             border: Border.all(
                                 width: width * 0.01,
-                                color:
-                                    Theme.of(context).scaffoldBackgroundColor),
+                                color: Theme.of(context)
+                                    .scaffoldBackgroundColor),
                             boxShadow: [
                               BoxShadow(
                                   spreadRadius: 2,

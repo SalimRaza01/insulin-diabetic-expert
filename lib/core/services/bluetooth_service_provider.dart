@@ -69,7 +69,7 @@ class BleManager extends ChangeNotifier {
   Future<void> connectToDevice(BluetoothDevice? device) async {
     if (device == null) return;
     try {
-      await device.connect();
+      await device.createBond( timeout: 90, pin: null);
       agvaDevice.value = device;
       notifyListeners();
 

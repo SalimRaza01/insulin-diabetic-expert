@@ -17,7 +17,7 @@ import '../../presentation/screens/basal_screen.dart';
 import '../../presentation/screens/smartbolus_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/SplashScreen',
+  initialLocation: '/HomeScreen',
   routes: [
     GoRoute(path: '/SplashScreen', builder: (context, state) => Splashscreen()),
      GoRoute(path: '/ReportScreen', builder: (context, state) => ReportScreen()),

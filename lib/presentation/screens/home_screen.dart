@@ -75,13 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
 
     if (_hivedb.getBool('DeviceSetup') == true) {
-
       _bleManager.agvaDevice.addListener(_onDeviceFound);
     } else {}
     getUserDetails();
     chartData = _fetchChartData(periods[currentIndex]);
   }
-
 
 //unused code as per new condition
   void _onDeviceFound() {
@@ -132,7 +130,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-
 //unused code as per new condition
     _bleManager.agvaDevice.removeListener(_onDeviceFound);
     super.dispose();
@@ -289,16 +286,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               SizedBox(
                                 width: 25,
                               ),
-                            
                               isScanning
                                   ? Image.asset(
-                                      'assets/images/scanning.gif',
-                                      width: 20,
+                                      'assets/images/BLESCAN3.gif',
+                                      height: 25,
                                     )
                                   : Icon(isConnected
                                       ? CupertinoIcons.rectangle_badge_checkmark
                                       : CupertinoIcons.rectangle_badge_xmark),
-
                               SizedBox(
                                 width: 25,
                               ),
@@ -507,8 +502,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return ShimmereffectGraph();
-                    } else if (snapshot.hasError) {
-                      return _buildErrorWidget(height, 'Error found');
                     } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return _buildErrorWidget(height, 'No Data found');
                     } else {
@@ -633,8 +626,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 
 //unused code as per new condition
   Future<void> popupDevice(

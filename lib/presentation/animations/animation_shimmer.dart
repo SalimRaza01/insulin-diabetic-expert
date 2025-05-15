@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 import '../screens/profile_screen.dart';
 
@@ -749,376 +750,382 @@ class ShimmereffectProfile extends StatelessWidget {
 
 class WithOutShimmerProfile extends StatelessWidget {
   const WithOutShimmerProfile({
-    super.key,
+    super.key, required this.waiting,
+
   });
+
+  final bool waiting;
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.onPrimary,
-      body: Container(
-        height: height,
-        width: width,
-        padding: EdgeInsets.only(
-          top: 25,
-        ),
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                Container(
-                  height: 285,
-                  width: width,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: Color.fromARGB(255, 255, 255, 255),
-                  ),
-                  child: Container(
+    return Skeletonizer(
+      enabled: waiting,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.onPrimary,
+        body: Container(
+          height: height,
+          width: width,
+          padding: EdgeInsets.only(
+            top: 25,
+          ),
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    height: 285,
                     width: width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
                       color: Color.fromARGB(255, 255, 255, 255),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Container(
+                      width: width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Textfield(
+                                height: height,
+                                items: '-',
+                                items2: '-',
+                                title: "Full Name"),
+                            Container(
+                              width: 200,
+                              child: Divider(
+                                thickness: 1,
+                              ),
+                            ),
+                            Textfield(height: height, items: '-', title: "Phone"),
+                            Container(
+                              width: 300,
+                              child: Divider(
+                                thickness: 1,
+                              ),
+                            ),
+                            Textfield(height: height, items: '-', title: "Email"),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Textfield(height: height, items: '-', title: "City"),
+                            Divider(
+                              thickness: 1,
+                            ),
+                            Textfield(height: height, items: '-', title: "State"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          child: Divider(
+                            thickness: 1,
+                          ),
+                          width: width * 0.2,
+                        ),
+                        Text('DEMOGRAPHIC',
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 167, 167, 167),
+                                fontSize: height * .015,
+                                fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          child: Divider(
+                            thickness: 1,
+                          ),
+                          width: width * 0.2,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Textfield(
-                              height: height,
-                              items: '-',
-                              items2: '-',
-                              title: "Full Name"),
                           Container(
-                            width: 200,
-                            child: Divider(
-                              thickness: 1,
+                            height: height * 0.09,
+                            width: width * 0.3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8, left: 15, right: 15),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Gender',
+                                    style: TextStyle(
+                                      fontSize: height * 0.014,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromARGB(255, 167, 167, 167),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/Male.png',
+                                        height: height * 0.032,
+                                      ),
+                                      Text('--',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 167, 167, 167),
+                                              fontSize: height * .015,
+                                              fontWeight: FontWeight.bold)),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Textfield(height: height, items: '-', title: "Phone"),
                           Container(
-                            width: 300,
-                            child: Divider(
-                              thickness: 1,
+                            height: height * 0.09,
+                            width: width * 0.3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8, left: 15, right: 15),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Height',
+                                    style: TextStyle(
+                                      fontSize: height * 0.014,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromARGB(255, 167, 167, 167),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/Man.png',
+                                        height: height * 0.035,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('--',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text('cms',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          Textfield(height: height, items: '-', title: "Email"),
-                          Divider(
-                            thickness: 1,
+                          Container(
+                            height: height * 0.09,
+                            width: width * 0.3,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8, left: 15, right: 15),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Weight',
+                                    style: TextStyle(
+                                      fontSize: height * 0.014,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromARGB(255, 167, 167, 167),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/Vector.png',
+                                        height: height * 0.035,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('--',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text('kg',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Textfield(height: height, items: '-', title: "City"),
-                          Divider(
-                            thickness: 1,
-                          ),
-                          Textfield(height: height, items: '-', title: "State"),
                         ],
                       ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
                       SizedBox(
-                        child: Divider(
-                          thickness: 1,
-                        ),
-                        width: width * 0.2,
+                        height: 20,
                       ),
-                      Text('DEMOGRAPHIC',
-                          style: TextStyle(
-                              color: Color.fromARGB(255, 167, 167, 167),
-                              fontSize: height * .015,
-                              fontWeight: FontWeight.bold)),
-                      SizedBox(
-                        child: Divider(
-                          thickness: 1,
-                        ),
-                        width: width * 0.2,
-                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: height * 0.09,
+                            width: width * 0.45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8, left: 20, right: 20),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Date of Birth',
+                                    style: TextStyle(
+                                      fontSize: height * 0.014,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromARGB(255, 167, 167, 167),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/Calenderr.png',
+                                        height: height * 0.035,
+                                      ),
+                                      Text('--/--/--',
+                                          style: TextStyle(
+                                              color: Color.fromARGB(
+                                                  255, 167, 167, 167),
+                                              fontSize: height * .015,
+                                              fontWeight: FontWeight.bold))
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: height * 0.09,
+                            width: width * 0.45,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              color: Color.fromARGB(255, 255, 255, 255),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 8, left: 20, right: 20),
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Diagnosis',
+                                    style: TextStyle(
+                                      fontSize: height * 0.014,
+                                      fontWeight: FontWeight.w300,
+                                      color: Color.fromARGB(255, 167, 167, 167),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Image.asset(
+                                        'assets/images/Diagnosis1.png',
+                                        height: height * 0.035,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text('--',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                          Text('--',
+                                              style: TextStyle(
+                                                  color: Color.fromARGB(
+                                                      255, 167, 167, 167),
+                                                  fontSize: height * .013,
+                                                  fontWeight: FontWeight.bold)),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
                     ],
-                  ),
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: height * 0.09,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 15, right: 15),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Gender',
-                                  style: TextStyle(
-                                    fontSize: height * 0.014,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromARGB(255, 167, 167, 167),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/Male.png',
-                                      height: height * 0.032,
-                                    ),
-                                    Text('--',
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 167, 167, 167),
-                                            fontSize: height * .015,
-                                            fontWeight: FontWeight.bold)),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: height * 0.09,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 15, right: 15),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Height',
-                                  style: TextStyle(
-                                    fontSize: height * 0.014,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromARGB(255, 167, 167, 167),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/Man.png',
-                                      height: height * 0.035,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('--',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('cms',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: height * 0.09,
-                          width: width * 0.3,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 15, right: 15),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Weight',
-                                  style: TextStyle(
-                                    fontSize: height * 0.014,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromARGB(255, 167, 167, 167),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/Vector.png',
-                                      height: height * 0.035,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('--',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('kg',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: height * 0.09,
-                          width: width * 0.45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 20, right: 20),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Date of Birth',
-                                  style: TextStyle(
-                                    fontSize: height * 0.014,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromARGB(255, 167, 167, 167),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/Calenderr.png',
-                                      height: height * 0.035,
-                                    ),
-                                    Text('--/--/--',
-                                        style: TextStyle(
-                                            color: Color.fromARGB(
-                                                255, 167, 167, 167),
-                                            fontSize: height * .015,
-                                            fontWeight: FontWeight.bold))
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: height * 0.09,
-                          width: width * 0.45,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16),
-                            color: Color.fromARGB(255, 255, 255, 255),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8, left: 20, right: 20),
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Diagnosis',
-                                  style: TextStyle(
-                                    fontSize: height * 0.014,
-                                    fontWeight: FontWeight.w300,
-                                    color: Color.fromARGB(255, 167, 167, 167),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Image.asset(
-                                      'assets/images/Diagnosis1.png',
-                                      height: height * 0.035,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('--',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                        Text('--',
-                                            style: TextStyle(
-                                                color: Color.fromARGB(
-                                                    255, 167, 167, 167),
-                                                fontSize: height * .013,
-                                                fontWeight: FontWeight.bold)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                )
-              ],
-            ),
-          ],
+                  )
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
