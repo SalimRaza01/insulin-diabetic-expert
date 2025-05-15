@@ -1,15 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../core/api/api_service.dart';
-import '../../core/theme/app_colors.dart';
+import '../../../core/api/api_service.dart';
+import '../../../core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
 
-import '../../core/utils/popover_bottomsheet.dart';
-import '../../data/models/city_model.dart';
-import '../../data/models/state_model.dart';
-import '../widgets/slider_widget.dart';
-import '../device_setup/device_setup_screen.dart';
-
+import '../../../core/utils/popover_bottomsheet.dart';
+import '../../../data/models/city_model.dart';
+import '../../../data/models/state_model.dart';
+import '../../widgets/slider_widget.dart';
 
 List<String> genderList = ['Male', 'Female'];
 List<String> diabetesList = ['Diabetes', 'HyperTension'];
@@ -535,28 +533,13 @@ class _SetupProfileState extends State<SetupProfile> {
                   textAlign: TextAlign.start,
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w200,
-                    fontSize: height * 0.03,
+                    fontSize: height * 0.025,
                   ),
                 ),
               ),
-              Text(
-                'INSUL',
-                style: TextStyle(
-                    fontFamily: 'Suissnord',
-                    fontSize: height * 0.1,
-                    color: Colors.white),
-              ),
-              Text(
-                "Your information is kept secured",
-                style: TextStyle(
-                  fontWeight: FontWeight.w200,
-                  fontSize: height * 0.023,
-                  color: Colors.white,
-                ),
-              ),
+              
               SizedBox(
-                height: height * 0.02,
+                height: height * 0.05,
               ),
               Container(
                 decoration: BoxDecoration(
@@ -1294,26 +1277,23 @@ class _SetupProfileState extends State<SetupProfile> {
                               if (validateAllFields() &&
                                   selectedDiabetesTypes.isNotEmpty) {
                                 setUpProfileApi(
-                                  firstnameController.text,
-                                  lastnameController.text,
-                                  dobController.text,
-                                  ageController.text,
-                                  cityController.text,
-                                  stateController.text,
-                                  genderController.text,
-                                  heightController.text,
-                                  weightController.text,
-                                  diabeties,
-                                  hypertension,
-                                  true,
-                                  "","", context
-                                );
+                                    firstnameController.text,
+                                    lastnameController.text,
+                                    dobController.text,
+                                    ageController.text,
+                                    cityController.text,
+                                    stateController.text,
+                                    genderController.text,
+                                    heightController.text,
+                                    weightController.text,
+                                    diabeties,
+                                    hypertension,
+                                    true,
+                                    "",
+                                    "",
+                                    context);
 
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            DeviceSetupScreen()));
+                       
                               } else {
                                 setState(() {
                                   if (selectedDiabetesTypes.isEmpty) {

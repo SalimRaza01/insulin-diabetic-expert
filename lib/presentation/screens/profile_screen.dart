@@ -9,7 +9,6 @@ import '../widgets/drawer_widget.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 import 'package:provider/provider.dart';
-
 import 'update_profile_screen.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 
@@ -229,6 +228,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 padding: EdgeInsets.only(left: 16, top: 25, right: 16),
                 child: Stack(
                   children: [
+                    
                     Padding(
                       padding: const EdgeInsets.only(top: 50),
                       child: FutureBuilder(
@@ -266,6 +266,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       
                               return Column(
                                 children: [
+                                
                                   Container(
                                     width: width,
                                     decoration: BoxDecoration(

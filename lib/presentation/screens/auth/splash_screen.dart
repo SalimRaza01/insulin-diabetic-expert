@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:INSUL/presentation/screens/sign_in_screen.dart';
+import 'package:INSUL/presentation/screens/auth/sign_in_screen.dart';
 import 'package:INSUL/presentation/screens/home_screen.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 

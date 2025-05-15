@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:INSUL/data/providers/device_provider.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
+import 'package:INSUL/presentation/widgets/profile_complete_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -293,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     )
                                   : Icon(isConnected
                                       ? CupertinoIcons.rectangle_badge_checkmark
-                                      : CupertinoIcons.rectangle_badge_xmark),
+                                      : CupertinoIcons.rectangle_badge_xmark, color: isConnected ? Colors.green : Colors.red,),
                               SizedBox(
                                 width: 25,
                               ),
@@ -313,7 +314,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       horizontal: 15),
                                   child: Column(
                                     children: [
-                                      //Today's_Status_Widget
+                                      Visibility(
+                                          visible: _hivedb.getBool(
+                                                  'isProfileCompleted') !=
+                                              true,
+                                          child: CompleteProfileCard()),
                                       SizedBox(height: height * 0.020),
                                       GestureDetector(child: TodaysStatus()),
 
@@ -349,11 +354,39 @@ class _HomeScreenState extends State<HomeScreen> {
 
                                       GestureDetector(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        WeightScreen()));
+                                            if (_hivedb.getBool(
+                                                    'isProfileCompleted') !=
+                                                true) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor:
+                                                        Colors.amber,
+                                                    content: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(CupertinoIcons
+                                                            .info_circle_fill),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                            'Complete your profile to access this feature'),
+                                                      ],
+                                                    )),
+                                              );
+                                            } else {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          WeightScreen()));
+                                            }
                                           },
                                           child: WeightChart()),
 
@@ -377,11 +410,39 @@ class _HomeScreenState extends State<HomeScreen> {
                                       SizedBox(height: height * 0.015),
                                       GestureDetector(
                                           onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        InsulinScreen()));
+                                            if (_hivedb.getBool(
+                                                    'isProfileCompleted') !=
+                                                true) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                    backgroundColor:
+                                                        Colors.amber,
+                                                    content: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Icon(CupertinoIcons
+                                                            .info_circle_fill),
+                                                        SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(
+                                                            'Complete your profile to access this feature'),
+                                                      ],
+                                                    )),
+                                              );
+                                            } else {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          InsulinScreen()));
+                                            }
                                           },
                                           child: Insulinchart()),
 

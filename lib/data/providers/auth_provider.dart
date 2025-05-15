@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 
 import '../../core/api/api_config.dart';
-import '../../presentation/screens/otp_screen.dart';
+import '../../presentation/screens/auth/otp_screen.dart';
 
 import 'package:INSUL/core/utils/hive_db_utils.dart';
   final _hivedb = HiveDbHelper();

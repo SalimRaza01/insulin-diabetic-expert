@@ -10,7 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'notification_screen.dart';
 import 'privacy_policy_screen.dart';
-import 'splash_screen.dart';
+import 'auth/splash_screen.dart';
 import 'terms&condition_screen.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 

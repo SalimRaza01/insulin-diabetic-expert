@@ -1,5 +1,3 @@
-
-
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 import 'package:INSUL/presentation/screens/home_screen.dart';
 import 'package:dio/dio.dart';
@@ -19,7 +17,7 @@ import '../../data/providers/smart_bolus_delivery_provider.dart';
 import '../../data/providers/weight_provider.dart';
 import 'api_config.dart';
 
-  final _hivedb = HiveDbHelper();
+final _hivedb = HiveDbHelper();
 
 Future<void> addMeal(FoodItem foodItem, String text, double newCarbs,
     double carbs, BuildContext context) async {
@@ -72,7 +70,6 @@ Future<void> addMeal(FoodItem foodItem, String text, double newCarbs,
 }
 
 Future<List<FoodItem>> getMeal() async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -152,7 +149,6 @@ Future<void> updateQuantity(
 }
 
 Future<void> addWeight(String tempWeight, BuildContext context) async {
-
   final dio = Dio();
   final String? userId = await _hivedb.getString('userId');
   try {
@@ -174,7 +170,6 @@ Future<void> addWeight(String tempWeight, BuildContext context) async {
 }
 
 Future<List<WeightPostData>> fetchWeightHistory() async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -201,23 +196,21 @@ Future<List<WeightPostData>> fetchWeightHistory() async {
 }
 
 Future<void> setUpProfileApi(
-  String? firstnameController,
-  String? lastnameController,
-  String? dobController,
-  String? ageController,
-  String? cityController,
-  String? stateController,
-  String? selectedGender,
-  String? heightController,
-  String? weightController,
-  bool? diabetes,
-  bool? hypertension,
-  bool? isProfileCompleted,
-  String? emailController,
-  String? phoneController,
-  BuildContext context
-) async {
-
+    String? firstnameController,
+    String? lastnameController,
+    String? dobController,
+    String? ageController,
+    String? cityController,
+    String? stateController,
+    String? selectedGender,
+    String? heightController,
+    String? weightController,
+    bool? diabetes,
+    bool? hypertension,
+    bool? isProfileCompleted,
+    String? emailController,
+    String? phoneController,
+    BuildContext context) async {
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -238,7 +231,7 @@ Future<void> setUpProfileApi(
       "hypertension": hypertension,
       "isProfileCompleted": isProfileCompleted,
       "email": emailController,
-      "phone" : phoneController,
+      "phone": phoneController,
     });
     print(response);
     print('api  hit');
@@ -246,18 +239,14 @@ Future<void> setUpProfileApi(
     if (response.statusCode == 200) {
       _hivedb.putBool('isProfileCompleted', isProfileCompleted!);
       _hivedb.putString('weight', weightController!);
-      Provider.of<ProfileUpdateNotifier>(context,
-                                      listen: false)
-                                  .updateProfile(true);
-                                           Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            HomeScreen()));
+      Provider.of<ProfileUpdateNotifier>(context, listen: false)
+          .updateProfile(true);
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => HomeScreen()));
       print(response);
     } else if (response.statusCode == 400) {
       print('api not hit');
-  
+
       print(response);
     }
   } catch (e) {
@@ -289,7 +278,6 @@ Future<ProfileModel> getProfileData() async {
 }
 
 Future<void> addBolusUnit(String unit, BuildContext context) async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -313,27 +301,21 @@ Future<void> addBolusUnit(String unit, BuildContext context) async {
 }
 
 Future<void> deviceSetup(bool status, BuildContext context) async {
-
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
-      
 
-    final response = await dio.put('$postSetupDevice/$userId', data: {
-      'isDeviceSetup': status,
-    });
-    if (response.statusCode == 200) {
-   
-      print('Device Setup True $status');
-    } else {
-      print('Device Setup Backend $response');
-    }
- 
+  final response = await dio.put('$postSetupDevice/$userId', data: {
+    'isDeviceSetup': status,
+  });
+  if (response.statusCode == 200) {
+    print('Device Setup True $status');
+  } else {
+    print('Device Setup Backend $response');
+  }
 }
 
 Future<void> addGlucoseUnit(String unit, BuildContext context) async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -342,7 +324,7 @@ Future<void> addGlucoseUnit(String unit, BuildContext context) async {
       'unit': unit,
     });
     if (response.statusCode == 200) {
-insulinUnit(unit, context);
+      insulinUnit(unit, context);
 
       Provider.of<GlucoseDelivery>(context, listen: false).glucoseUpdate(true);
 
@@ -390,7 +372,6 @@ Future<List<Citymodel>> getCityList(state) async {
 
 Future<void> addBasal(
     String endTimeController, String unit, BuildContext context) async {
-
   final dio = Dio();
   final String? userId = await _hivedb.getString('userId');
   print('unit');
@@ -400,7 +381,7 @@ Future<void> addBasal(
       'unit': unit,
     });
     if (response.statusCode == 200) {
-    insulinUnit(unit, context);
+      insulinUnit(unit, context);
 
       Provider.of<BasalDelivery>(context, listen: false).updateBasalGraph(true);
       print(response);
@@ -431,7 +412,6 @@ void getLastWeight() async {
 }
 
 Future<void> smartBolusApi(String unit, BuildContext context) async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -454,7 +434,6 @@ Future<void> smartBolusApi(String unit, BuildContext context) async {
 }
 
 Future<void> insulinUnit(String unit, BuildContext context) async {
-
   final dio = Dio();
 
   final String? userId = await _hivedb.getString('userId');
@@ -473,5 +452,3 @@ Future<void> insulinUnit(String unit, BuildContext context) async {
     print(e);
   }
 }
-
-

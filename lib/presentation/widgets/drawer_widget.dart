@@ -15,6 +15,7 @@ class AppDrawerNavigation extends StatefulWidget {
   @override
   State<AppDrawerNavigation> createState() => _AppDrawerNavigationState();
 }
+
 class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
   final BleManager _bleManager = BleManager();
   final _hivedb = HiveDbHelper();
@@ -85,7 +86,9 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
                             color: Colors.white,
                             fontSize: height * 0.018,
                             fontWeight: FontWeight.w500),
-                        '${_hivedb.getString('firstName')} ${_hivedb.getString('lastName')}'),
+                        _hivedb.getBool('ProfileCompleted') == true
+                            ? '${_hivedb.getString('firstName')} ${_hivedb.getString('lastName')}'
+                            : ''),
                     accountEmail: Text(
                       'Device Id : #25254',
                       style: TextStyle(
@@ -163,9 +166,8 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
                   ListTile(
                     leading: Icon(
                       Icons.track_changes_sharp,
-                      color: widget.screenName == ''
-                          ? Colors.white
-                          : Colors.grey,
+                      color:
+                          widget.screenName == '' ? Colors.white : Colors.grey,
                       size: height * 0.022,
                     ),
                     title: Text('SMART BOLUS',
@@ -186,9 +188,8 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
                   ListTile(
                     leading: Icon(
                       Icons.track_changes_sharp,
-                      color: widget.screenName == ''
-                          ? Colors.white
-                          : Colors.grey,
+                      color:
+                          widget.screenName == '' ? Colors.white : Colors.grey,
                       size: height * 0.022,
                     ),
                     title: Text('BOLUS WIZARD',
@@ -205,9 +206,8 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
                   ListTile(
                     leading: Icon(
                       Icons.track_changes_sharp,
-                      color: widget.screenName == ''
-                          ? Colors.white
-                          : Colors.grey,
+                      color:
+                          widget.screenName == '' ? Colors.white : Colors.grey,
                       size: height * 0.022,
                     ),
                     title: Text('BASAL WIZARD',
@@ -268,13 +268,17 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
               ListTile(
                 leading: Icon(
                   Icons.paypal,
-                  color: widget.screenName == 'PAYMENT' ? Colors.white : Colors.grey,
+                  color: widget.screenName == 'PAYMENT'
+                      ? Colors.white
+                      : Colors.grey,
                   size: height * 0.025,
                 ),
                 title: Text(
                   'PAYMENT',
                   style: TextStyle(
-                    color: widget.screenName == 'PAYMENT' ? Colors.white : Colors.grey,
+                    color: widget.screenName == 'PAYMENT'
+                        ? Colors.white
+                        : Colors.grey,
                     fontSize: height * 0.018,
                   ),
                 ),
@@ -310,7 +314,6 @@ class _AppDrawerNavigationState extends State<AppDrawerNavigation> {
     );
   }
 }
-
 
 class NoDeviceFound extends StatelessWidget {
   TextEditingController bloodCountController = TextEditingController();
