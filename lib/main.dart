@@ -136,6 +136,7 @@ void main() async {
   await HiveDbHelper().init();
   FlutterBluePlus.setLogLevel(LogLevel.verbose, color: true);
   await initializeService();
+
   runApp(
     MultiProvider(
       providers: [

@@ -3,6 +3,7 @@
 import 'dart:async';
 import 'package:INSUL/data/providers/device_provider.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
+import 'package:INSUL/presentation/widgets/device_setup_reminder.dart';
 import 'package:INSUL/presentation/widgets/profile_complete_widget.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -73,13 +74,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
 
     if (_hivedb.getBool('DeviceSetup') == true) {
       _bleManager.agvaDevice.addListener(_onDeviceFound);
     } else {}
     getUserDetails();
     chartData = _fetchChartData(periods[currentIndex]);
+    super.initState();
   }
 
 //unused code as per new condition
@@ -282,7 +283,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                     await _requestCameraPermission();
                                   }
                                 },
-                                child: Icon(CupertinoIcons.barcode_viewfinder),
+                                child: Icon(
+                                  CupertinoIcons.barcode_viewfinder,
+                                )
                               ),
                               SizedBox(
                                 width: 25,
@@ -292,9 +295,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'assets/images/BLESCAN3.gif',
                                       height: 25,
                                     )
-                                  : Icon(isConnected
-                                      ? CupertinoIcons.rectangle_badge_checkmark
-                                      : CupertinoIcons.rectangle_badge_xmark, color: isConnected ? Colors.green : Colors.red,),
+                                  : Icon(
+                                      isConnected
+                                          ? CupertinoIcons
+                                              .rectangle_badge_checkmark
+                                          : CupertinoIcons
+                                              .rectangle_badge_xmark,
+                                      color: isConnected
+                                          ? Colors.green
+                                          : Colors.red,
+                                    ),
                               SizedBox(
                                 width: 25,
                               ),
@@ -314,6 +324,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       horizontal: 15),
                                   child: Column(
                                     children: [
+                                      ConnectDeviceReminderCard(
+                                        onConnect: () {},
+                                      ),
                                       Visibility(
                                           visible: _hivedb.getBool(
                                                   'isProfileCompleted') !=
