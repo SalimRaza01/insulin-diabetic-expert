@@ -2,6 +2,7 @@
 
 import 'dart:async';
 import 'package:INSUL/data/providers/device_provider.dart';
+import 'package:INSUL/presentation/animations/tutorial_screen.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
 import 'package:INSUL/presentation/widgets/device_setup_reminder.dart';
 import 'package:INSUL/presentation/widgets/profile_complete_widget.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:INSUL/presentation/screens/glucose_screen.dart';
 import 'package:INSUL/presentation/screens/smartbolus_screen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +76,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-
     if (_hivedb.getBool('DeviceSetup') == true) {
       _bleManager.agvaDevice.addListener(_onDeviceFound);
     } else {}
@@ -196,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return Consumer<NutritionChartNotifier>(
+    return  Consumer<NutritionChartNotifier>(
         builder: (context, nutritionNotifier, child) {
       if (nutritionNotifier.nutritionStatus == true) {
         chartData = _fetchChartData(periods[currentIndex]);
@@ -226,67 +227,75 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor:
                                 Theme.of(context).colorScheme.secondary,
                             actions: <Widget>[
-                              InkWell(
-                                onTap: () async {
-                                  if (adapterState ==
-                                      BluetoothAdapterState.off) {
-                                    showModalBottomSheet<void>(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          height: height * 0.2,
-                                          decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 5, 53, 93)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(20),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      "Bluetooth is turned off",
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              height * 0.022,
-                                                          color: Colors.white),
-                                                    ),
-                                                    SizedBox(
-                                                      height: height * 0.02,
-                                                    ),
-                                                    Text(
-                                                      "Please turn on your bluetooth to connect insulin ",
-                                                      style: TextStyle(
-                                                          fontSize:
-                                                              height * 0.012,
-                                                          color: Colors.white),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Icon(Icons.bluetooth_disabled,
-                                                    size: height * 0.04,
-                                                    color: Colors.white)
-                                              ],
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  } else {
-                                    await _requestCameraPermission();
-                                  }
-                                },
-                                child: Icon(
-                                  CupertinoIcons.barcode_viewfinder,
-                                )
+                               GestureDetector(
+                                  onTap: () => context.go('/tutorial'),
+                                  child: Icon(CupertinoIcons.info_circle)),
+                              SizedBox(
+                                width: 20,
                               ),
+                              InkWell(
+                                  onTap: () async {
+                                    if (adapterState ==
+                                        BluetoothAdapterState.off) {
+                                      showModalBottomSheet<void>(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            height: height * 0.2,
+                                            decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 5, 53, 93)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.all(20),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "Bluetooth is turned off",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                height * 0.022,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                      SizedBox(
+                                                        height: height * 0.02,
+                                                      ),
+                                                      Text(
+                                                        "Please turn on your bluetooth to connect insulin ",
+                                                        style: TextStyle(
+                                                            fontSize:
+                                                                height * 0.012,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Icon(Icons.bluetooth_disabled,
+                                                      size: height * 0.04,
+                                                      color: Colors.white)
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    } else {
+                                      await _requestCameraPermission();
+                                    }
+                                  },
+                                  child: Icon(
+                                    CupertinoIcons.barcode_viewfinder,
+                                  )),
                               SizedBox(
                                 width: 25,
                               ),
@@ -316,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             ],
                           ),
-                          body: Stack(
+                          body:  Stack(
                             children: [
                               SingleChildScrollView(
                                 child: Container(
