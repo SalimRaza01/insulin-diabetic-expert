@@ -26,6 +26,7 @@ final GoRouter appRouter = GoRouter(
         path: '/DevicesScreen', builder: (context, state) => DevicesScreen()),
     GoRoute(path: '/HomeScreen', builder: (context, state) => HomeScreen()),
         GoRoute(path: '/tutorial', builder: (context, state) => TutorialScreen()),
+              GoRoute(path: '/setupProfile', builder: (context, state) => SetupProfile()),
     GoRoute(
         path: '/DeviceSetupScreen',
         builder: (context, state) => DeviceSetupScreen()),

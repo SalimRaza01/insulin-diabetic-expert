@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'package:INSUL/data/providers/device_provider.dart';
-import 'package:INSUL/presentation/animations/tutorial_screen.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
 import 'package:INSUL/presentation/widgets/device_setup_reminder.dart';
 import 'package:INSUL/presentation/widgets/profile_complete_widget.dart';
@@ -76,6 +75,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+
+// Future.delayed(Duration(milliseconds: 500), () {
+//   context.go('/tutorial');
+// } );
+
     if (_hivedb.getBool('DeviceSetup') == true) {
       _bleManager.agvaDevice.addListener(_onDeviceFound);
     } else {}
@@ -340,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           visible: _hivedb.getBool(
                                                   'isProfileCompleted') !=
                                               true,
-                                          child: CompleteProfileCard()),
+                                          child: ProfileCompleteCard()),
                                       SizedBox(height: height * 0.020),
                                       GestureDetector(child: TodaysStatus()),
 
