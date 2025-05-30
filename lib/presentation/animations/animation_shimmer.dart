@@ -775,7 +775,7 @@ class WithOutShimmerProfile extends StatelessWidget {
               Column(
                 children: [
                   Container(
-                    height: 285,
+                 
                     width: width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),

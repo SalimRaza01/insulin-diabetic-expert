@@ -608,35 +608,45 @@ class _TutorialScreenState extends State<TutorialScreen> {
       setState(() {
         count--;
       });
+    }   else {
+      context.go('/HomeScreen');
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(212, 54, 54, 54),
       body: Padding(
         padding: const EdgeInsets.all(50),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(count == 1
-                ? 'assets/images/1.png'
-                : count == 2
-                    ? 'assets/images/2.png'
-                    : count == 3
-                        ? 'assets/images/3.png'
-                        : count == 4
-                            ? 'assets/images/4.png'
-                            : count == 5
-                                ? 'assets/images/5.png'
-                                : count == 6
-                                    ? 'assets/images/6.png'
-                                    : count == 7
-                                        ? 'assets/images/7.png'
-                                        : 'assets/images/7.png')
-          ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                count == 1
+                    ? 'assets/images/1.png'
+                    : count == 2
+                        ? 'assets/images/2.png'
+                        : count == 3
+                            ? 'assets/images/3.png'
+                            : count == 4
+                                ? 'assets/images/4.png'
+                                : count == 5
+                                    ? 'assets/images/5.png'
+                                    : count == 6
+                                        ? 'assets/images/6.png'
+                                        : count == 7
+                                            ? 'assets/images/7.png'
+                                            : 'assets/images/7.png',
+                height: height * 0.9,
+              )
+            ],
+          ),
         ),
       ),
       floatingActionButton: Row(

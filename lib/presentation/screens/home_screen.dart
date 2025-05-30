@@ -80,20 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
 //   context.go('/tutorial');
 // } );
 
-    if (_hivedb.getBool('DeviceSetup') == true) {
-      _bleManager.agvaDevice.addListener(_onDeviceFound);
-    } else {}
+    // if (_hivedb.getBool('DeviceSetup') == true) {
+    //   _bleManager.agvaDevice.addListener(_onDeviceFound);
+    // } else {}
     getUserDetails();
     chartData = _fetchChartData(periods[currentIndex]);
     super.initState();
   }
 
 //unused code as per new condition
-  void _onDeviceFound() {
-    if (_bleManager.agvaDevice.value != null) {
-      popupDevice(context, _bleManager.agvaDevice.value!, _bleManager);
-    }
-  }
+  // void _onDeviceFound() {
+  //   if (_bleManager.agvaDevice.value != null) {
+  //     popupDevice(context, _bleManager.agvaDevice.value!, _bleManager);
+  //   }
+  // }
 
   Future<void> _requestCameraPermission() async {
     var status = await Permission.camera.status;
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onQRDetected(Barcode barcode, BuildContext context) async {
     final deviceName = barcode.rawValue;
 
-    if (deviceName == 'INSUL-AGVA') {
+    if (deviceName == 'INSUL') {
       _hivedb.putString('device_name', deviceName!);
       Provider.of<DeviceProvider>(context, listen: false)
           .updateDeviceName(deviceName);
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
 //unused code as per new condition
-    _bleManager.agvaDevice.removeListener(_onDeviceFound);
+    // _bleManager.agvaDevice.removeListener(_onDeviceFound);
     super.dispose();
   }
 
@@ -294,7 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                       );
                                     } else {
-                                      await _requestCameraPermission();
+                                     await _requestCameraPermission();
+                                          // _bleManager.initializeBluetoothListeners();
                                     }
                                   },
                                   child: Icon(
@@ -745,7 +746,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         Padding(
                           padding: EdgeInsets.only(top: 10),
                           child: Text(
-                            _hivedb.getString('device_name')!,
+                            // _hivedb.getString('device_name')!,
+                            'Mara ESP',
                             style: TextStyle(
                               fontSize: height * 0.035,
                               fontWeight: FontWeight.w300,

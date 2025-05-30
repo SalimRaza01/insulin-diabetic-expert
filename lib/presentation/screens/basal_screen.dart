@@ -865,8 +865,8 @@ class _BasalWizardState extends State<BasalWizard> {
                                 DateTime writingEndTime =
                                     DateTime.parse(endtime.toString());
 
-                                _bleManager.readOrWriteCharacteristic(
-                                    char, cmd, false);
+                                // _bleManager.readOrWriteCharacteristic(
+                                //     char, cmd, false);
 
                                 await addBasal(endTimeController.text,
                                     dosageController.text, context);
@@ -876,8 +876,8 @@ class _BasalWizardState extends State<BasalWizard> {
 
                                 Future.delayed(Duration(seconds: 2), () {
                                   print('wrriting into BLE');
-                                  _bleManager.readOrWriteCharacteristic(
-                                      char, cmd, true);
+                                  // _bleManager.readOrWriteCharacteristic(
+                                  //     char, cmd, true);
 
                                   print('wrriting into BLE 2');
 

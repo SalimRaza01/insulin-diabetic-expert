@@ -744,9 +744,9 @@ class _BolusWizardState extends State<BolusWizard> {
                                                             .text);
                                                   });
 
-                                                  _bleManager
-                                                      .readOrWriteCharacteristic(
-                                                          char, cmd, true);
+                                                  // _bleManager
+                                                  //     .readOrWriteCharacteristic(
+                                                  //         char, cmd, true);
 
                                                   Navigator.pop(context);
                                                   _waitingDialogBox();

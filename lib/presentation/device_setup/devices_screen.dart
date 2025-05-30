@@ -68,7 +68,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                           .colorScheme
                                           .primaryContainer,
                                     ),
-                                    title: Text("AgVa Insul",
+                                    title: Text(agvaDevice!.platformName,
                                         style: TextStyle(
                                           color: Theme.of(context)
                                               .colorScheme
@@ -77,101 +77,99 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                         )),
                                     trailing: SizedBox(),
                                     children: [
-                                      // Container(
-                                      //   decoration: BoxDecoration(
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(10),
-                                      //     color: Theme.of(context)
-                                      //         .colorScheme
-                                      //         .primary,
-                                      //   ),
-                                      //   child: Column(
-                                      //     children: [
-                                      //       InkWell(
-                                      //         onTap: () {
-                                      //           _bleManager.disconnectDevice(
-                                      //               agvaDevice);
-                                      //         },
-                                      //         child: ListTile(
-                                      //           shape: Border(),
-                                      //           title: Text("Disconnect",
-                                      //               style: TextStyle(
-                                      //                 color: Theme.of(context)
-                                      //                     .colorScheme
-                                      //                     .secondaryContainer,
-                                      //                 fontWeight:
-                                      //                     AppColor.lightWeight,
-                                      //               )),
-                                      //           trailing: SizedBox(),
-                                      //         ),
-                                      //       ),
-                                      //       GestureDetector(
-                                      //         onTap: () {
-                                      //           showModalBottomSheet(
-                                      //             backgroundColor:
-                                      //                 Colors.transparent,
-                                      //             context: context,
-                                      //             builder:
-                                      //                 (BuildContext context) {
-                                      //               return CupertinoActionSheet(
-                                      //                 actions: <Widget>[
-                                      //                   ListTile(
-                                      //                     title: Text(
-                                      //                       'Forget Device',
-                                      //                       style: TextStyle(
-                                      //                         color: Colors.red,
-                                      //                       ),
-                                      //                     ),
-                                      //                     onTap: () {
-                                      //                       _bleManager
-                                      //                           .disconnectDevice(
-                                      //                             agvaDevice);
-                                      //                       print(
-                                      //                           "Device DIsconnected ${agvaDevice}");
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            InkWell(
+                                              onTap: () {
+                                                _bleManager.disconnectDevice(
+                                                    agvaDevice);
+                                              },
+                                              child: ListTile(
+                                                shape: Border(),
+                                                title: Text("Disconnect",
+                                                    style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .secondaryContainer,
+                                                      fontWeight:
+                                                          AppColor.lightWeight,
+                                                    )),
+                                                trailing: SizedBox(),
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                showModalBottomSheet(
+                                                  backgroundColor:
+                                                      Colors.transparent,
+                                                  context: context,
+                                                  builder:
+                                                      (BuildContext context) {
+                                                    return CupertinoActionSheet(
+                                                      actions: <Widget>[
+                                                        ListTile(
+                                                          title: Text(
+                                                            'Forget Device',
+                                                            style: TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                          ),
+                                                          onTap: () {
+                                                            _bleManager
+                                                                .forgetDevice(
+                                                                    agvaDevice);
 
-                                      //                       Navigator.of(
-                                      //                               context)
-                                      //                           .pop();
-                                      //                     },
-                                      //                   ),
-                                      //                   ListTile(
-                                      //                     leading: Icon(
-                                      //                       Icons.cancel,
-                                      //                       color: Colors.red,
-                                      //                     ),
-                                      //                     title: Text(
-                                      //                       'Cancel',
-                                      //                       style: TextStyle(
-                                      //                         color: Colors.red,
-                                      //                       ),
-                                      //                     ),
-                                      //                     onTap: () {
-                                      //                       Navigator.of(
-                                      //                               context)
-                                      //                           .pop();
-                                      //                     },
-                                      //                   ),
-                                      //                 ],
-                                      //               );
-                                      //             },
-                                      //           );
-                                      //         },
-                                      //         child: ListTile(
-                                      //           shape: Border(),
-                                      //           title:
-                                      //               Text("Forget This Device",
-                                      //                   style: TextStyle(
-                                      //                     color: Color.fromARGB(
-                                      //                         255, 197, 13, 0),
-                                      //                     fontWeight: AppColor
-                                      //                         .lightWeight,
-                                      //                   )),
-                                      //           trailing: SizedBox(),
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      // ),
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                        ListTile(
+                                                          leading: Icon(
+                                                            Icons.cancel,
+                                                            color: Colors.red,
+                                                          ),
+                                                          title: Text(
+                                                            'Cancel',
+                                                            style: TextStyle(
+                                                              color: Colors.red,
+                                                            ),
+                                                          ),
+                                                          onTap: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                        ),
+                                                      ],
+                                                    );
+                                                  },
+                                                );
+                                              },
+                                              child: ListTile(
+                                                shape: Border(),
+                                                title:
+                                                    Text("Forget This Device",
+                                                        style: TextStyle(
+                                                          color: Color.fromARGB(
+                                                              255, 197, 13, 0),
+                                                          fontWeight: AppColor
+                                                              .lightWeight,
+                                                        )),
+                                                trailing: SizedBox(),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ),
