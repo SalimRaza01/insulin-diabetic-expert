@@ -75,7 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-
 // Future.delayed(Duration(milliseconds: 500), () {
 //   context.go('/tutorial');
 // } );
@@ -201,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final height = MediaQuery.of(context).size.height;
     final width = MediaQuery.of(context).size.width;
 
-    return  Consumer<NutritionChartNotifier>(
+    return Consumer<NutritionChartNotifier>(
         builder: (context, nutritionNotifier, child) {
       if (nutritionNotifier.nutritionStatus == true) {
         chartData = _fetchChartData(periods[currentIndex]);
@@ -231,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             backgroundColor:
                                 Theme.of(context).colorScheme.secondary,
                             actions: <Widget>[
-                               GestureDetector(
+                              GestureDetector(
                                   onTap: () => context.go('/tutorial'),
                                   child: Icon(CupertinoIcons.info_circle)),
                               SizedBox(
@@ -294,8 +293,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                       );
                                     } else {
-                                     await _requestCameraPermission();
-                                          // _bleManager.initializeBluetoothListeners();
+                                      //  await _requestCameraPermission();
+                                      _bleManager
+                                          .initializeBluetoothListeners();
                                     }
                                   },
                                   child: Icon(
@@ -309,15 +309,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                       'assets/images/BLESCAN3.gif',
                                       height: 25,
                                     )
-                                  : Icon(
-                                      isConnected
-                                          ? CupertinoIcons
-                                              .rectangle_badge_checkmark
-                                          : CupertinoIcons
-                                              .rectangle_badge_xmark,
-                                      color: isConnected
-                                          ? Colors.green
-                                          : Colors.red,
+                                  : InkWell(
+                                      onTap: () {
+                                        isConnected
+                                            ? _bleManager.readOrWriteCharacteristic(
+                                                'beb5483e-36e1-4688-b7f5-ea07361b26a8',
+                                                'CM+SEND',
+                                                true)
+                                            : null;
+                                      },
+                                      child: Icon(
+                                        isConnected
+                                            ? CupertinoIcons
+                                                .rectangle_badge_checkmark
+                                            : CupertinoIcons
+                                                .rectangle_badge_xmark,
+                                        color: isConnected
+                                            ? Colors.green
+                                            : Colors.red,
+                                      ),
                                     ),
                               SizedBox(
                                 width: 25,
@@ -330,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )
                             ],
                           ),
-                          body:  Stack(
+                          body: Stack(
                             children: [
                               SingleChildScrollView(
                                 child: Container(
