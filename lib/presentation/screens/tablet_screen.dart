@@ -134,9 +134,10 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                         width: 20,
                                       ),
                                       InkWell(
-                                          onTap: () async {
-                                            await _requestCameraPermission();
-                                            // _bleManager.initializeBluetoothListeners();
+                                          onTap: () {
+                                            // await _requestCameraPermission();
+                                            _bleManager
+                                                .initializeBluetoothListeners();
                                           },
                                           child: Icon(
                                             CupertinoIcons.barcode_viewfinder,
@@ -176,7 +177,8 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                 ),
                                 InkWell(
                                   onTap: () => isConnected
-                                      ? _bleManager.forgetDevice(agvaDevice)
+                                      // ? _bleManager.forgetDevice(agvaDevice)
+                                      ? _bleManager.readOrWriteCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26a8', 'CM+SEND', true)
                                       : null,
                                   child: AnimatedContainer(
                                     duration: Duration(seconds: 1),
@@ -194,7 +196,7 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
                                               child: Text(
-                                                  'ESP CONNECTED  (Tap to Disconnect)')),
+                                                  'ESP CONNECTED  (Tap to Write CMD) ')),
                                         ),
                                       ),
                                     ),

@@ -4,7 +4,6 @@ import 'package:INSUL/presentation/screens/report_screen.dart';
 import 'package:INSUL/presentation/screens/tablet_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../../presentation/screens/auth/splash_screen.dart';
-import '../../presentation/screens/home_screen.dart';
 import '../../presentation/device_setup/device_setup_screen.dart';
 import '../../presentation/device_setup/devices_screen.dart';
 import '../../presentation/screens/weight_screen.dart';
