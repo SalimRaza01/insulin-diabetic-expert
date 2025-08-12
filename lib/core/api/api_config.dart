@@ -2,7 +2,7 @@ final url = 'http://172.23.100.121:5000';
 final searchMealData =
     'http://172.23.100.121:8000/insul/fatsecret/search-food-by-name';
 final postMealData = '$url/api/v1/nutrition/add-data';
-final getMealData = '$url/api/v1/nutrition/get-data';
+final getMealData = '$url/api/v1/nutrition/get-data'; 
 final deleteMealData = '$url/api/v1/nutrition/delete-data';
 final updateMealQuantity = '$url/api/v1/nutrition/update-data';
 final fetchNutritionDataChart = '$url/api/v1/nutrition/get-data-count';
