@@ -3,7 +3,7 @@ import 'package:animated_icon/animated_icon.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../../core/api/api_config.dart';
-import '../../../core/theme/app_colors.dart';
+import '../../../core/constants/app_colors.dart';
 import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 

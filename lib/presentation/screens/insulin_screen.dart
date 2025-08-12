@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../widgets/graph/basal_graph.dart';
 import '../widgets/graph/bolus_graph.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';

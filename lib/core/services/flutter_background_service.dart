@@ -5,6 +5,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 const notificationChannelId = 'my_foreground';
 const notificationId = 888;
+
 Future<void> initializeService() async {
   final service = FlutterBackgroundService();
 

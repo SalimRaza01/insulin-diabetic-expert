@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, unnecessary_new
 
 import 'dart:async';
+import 'package:INSUL/core/constants/ble_device_info.dart';
 import 'package:INSUL/data/providers/device_provider.dart';
 import 'package:INSUL/presentation/widgets/blood_count.dart';
 import 'package:INSUL/presentation/widgets/device_setup_reminder.dart';
@@ -19,7 +20,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:top_modal_sheet/top_modal_sheet.dart';
 import '../../core/api/api_config.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/providers/nutrition_provider.dart';
 import '../animations/animation_shimmer.dart';
 import '../widgets/bettery_widget.dart';
@@ -121,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onQRDetected(Barcode barcode, BuildContext context) async {
     final deviceName = barcode.rawValue;
 
-    if (deviceName == 'INSUL') {
+    if (deviceName == 'INSUL-AGVA') {
       _hivedb.putString('device_name', deviceName!);
       Provider.of<DeviceProvider>(context, listen: false)
           .updateDeviceName(deviceName);
@@ -293,9 +294,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         },
                                       );
                                     } else {
-                                      //  await _requestCameraPermission();
-                                      _bleManager
-                                          .initializeBluetoothListeners();
+                                      await _requestCameraPermission();
+                                      // _bleManager
+                                      //     .initializeBluetoothListeners();
                                     }
                                   },
                                   child: Icon(
@@ -312,10 +313,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   : InkWell(
                                       onTap: () {
                                         isConnected
-                                            ? _bleManager.readOrWriteCharacteristic(
-                                                'beb5483e-36e1-4688-b7f5-ea07361b26a8',
-                                                'CM+SEND',
-                                                true)
+                                            ? _bleManager
+                                                .readOrWriteCharacteristic(
+                                                    BleDeviceInfo
+                                                        .characteristicUuid,
+                                                    BleDeviceInfo.connectionCMD,
+                                                    true)
                                             : null;
                                       },
                                       child: Icon(

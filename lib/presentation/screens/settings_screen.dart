@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/providers/theme_provider.dart';
 import '../widgets/drawer_widget.dart';
 import 'package:provider/provider.dart';

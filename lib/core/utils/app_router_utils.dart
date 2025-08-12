@@ -2,7 +2,6 @@ import 'package:INSUL/presentation/animations/tutorial_screen.dart';
 import 'package:INSUL/presentation/screens/home_screen.dart';
 import 'package:INSUL/presentation/screens/payment_screen.dart';
 import 'package:INSUL/presentation/screens/report_screen.dart';
-import 'package:INSUL/presentation/screens/tablet_screen.dart';
 import 'package:go_router/go_router.dart';
 import '../../presentation/screens/auth/splash_screen.dart';
 import '../../presentation/device_setup/device_setup_screen.dart';
@@ -26,7 +25,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
         path: '/DevicesScreen', builder: (context, state) => DevicesScreen()),
     GoRoute(
-        path: '/HomeScreen', builder: (context, state) => HomeScreenTablet()),
+        path: '/HomeScreen', builder: (context, state) => HomeScreen()),
     GoRoute(path: '/tutorial', builder: (context, state) => TutorialScreen()),
     GoRoute(path: '/setupProfile', builder: (context, state) => SetupProfile()),
     GoRoute(

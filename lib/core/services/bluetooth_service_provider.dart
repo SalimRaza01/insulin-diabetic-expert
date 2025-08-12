@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:INSUL/core/constants/ble_device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -56,8 +57,6 @@ class BleManager extends ChangeNotifier {
     0x05
   ]));
 
-  static const String _characteristicUuid =
-      "beb5483e-36e1-4688-b7f5-ea07361b26a8";
 
   static final BleManager _instance = BleManager._internal();
 
@@ -111,8 +110,8 @@ class BleManager extends ChangeNotifier {
 
   void _processScanResults(List<ScanResult> results) async {
     for (ScanResult result in results) {
-      // if (result.device.platformName == await _hivedb.getString('device_name')) {
-      if (result.device.platformName == 'INSUL') {
+      if (result.device.platformName == await _hivedb.getString('device_name')) {
+      // if (result.device.platformName == 'INSUL-AGVA') {
         print('[BLE] Found matching device: ${result.device.platformName}');
         connectToDevice(result.device);
         FlutterBluePlus.stopScan();
@@ -139,13 +138,15 @@ class BleManager extends ChangeNotifier {
     try {
       await device.connect();
 
-      // final bondState = await device.bondState.first;
-      // if (bondState != BluetoothBondState.bonded) {
-      //   print("[BLE] Creating bond with ${device.platformName}...");
-      //   await device.createBond(); // Triggers pairing popup
-      // } else {
-      //   print("[BLE] Bonding Already Done with ${device.platformName}...");
-      // }
+      final bondState = await device.bondState.first;
+      if (bondState != BluetoothBondState.bonded) {
+        print("[BLE] Creating bond with ${device.platformName}...");
+
+        await device.createBond(); 
+
+      } else {
+        print("[BLE] Bonding Already Done with ${device.platformName}...");
+      }
 
       agvaDevice.value = device;
       notifyListeners();
@@ -210,7 +211,7 @@ class BleManager extends ChangeNotifier {
         _hivedb.putBool('DeviceSetup', true);
         notifyListeners();
 
-        // readOrWriteCharacteristic(_characteristicUuid, 'CM+SEND', true);
+        readOrWriteCharacteristic(BleDeviceInfo.characteristicUuid, BleDeviceInfo.connectionCMD, true);
       }
     } catch (e) {
       print('[BLE] Service discovery failed: $e');
@@ -221,19 +222,24 @@ class BleManager extends ChangeNotifier {
 
   Future<void> readOrWriteCharacteristic(
       String characteristicUuid, String text, bool isRead) async {
+
+
+
+        
     try {
       BluetoothCharacteristic? characteristic =
           findCharacteristic(characteristicUuid);
       print('[BLE] Writing ');
       if (characteristic != null) {
-        print('[BLE] Writing 2');
+        print('[BLE] Writing without encode $text');
         await characteristic.write(utf8.encode(text), withoutResponse: false);
+           print('[BLE] Writing without encode ${utf8.encode(text)}');
         if (isRead) {
           print('[BLE] Writing 3');
           var data = await characteristic.read();
 
-          print('[BLE] Writing 4 $data');
-          decryptBLEData(data);
+          print('[BLE] Writing 4 ${utf8.decode(data)}');
+          // decryptBLEData(data);
 
           //          final hexString = utf8.decode(data).replaceAll(" ", "").trim();
           // print("Encrypted HEX string: $hexString");
@@ -249,6 +255,8 @@ class BleManager extends ChangeNotifier {
           //for non encrypted data
           // var dataDecoded = utf8.decode(data);
           // print('[BLE] Data received: $dataDecoded');
+
+
 
           //for encrypted data
           // final decryptedData = AesDecryptor.decrypt(Uint8List.fromList(data));

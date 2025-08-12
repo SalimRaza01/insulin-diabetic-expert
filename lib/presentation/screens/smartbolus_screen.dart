@@ -5,7 +5,7 @@ import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/nutrition_middleware.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/models/search_meal_model.dart';
 import '../../data/providers/smart_bolus_delivery_provider.dart';
 import '../animations/animation_shimmer.dart';

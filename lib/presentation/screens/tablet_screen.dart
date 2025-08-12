@@ -1,6 +1,7 @@
 // ignore_for_file: file_names, prefer_const_literals_to_create_immutables, unnecessary_new
 
 import 'dart:async';
+import 'package:INSUL/core/constants/ble_device_info.dart';
 import 'package:INSUL/data/providers/device_provider.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -56,7 +57,7 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
   void _onQRDetected(Barcode barcode, BuildContext context) async {
     final deviceName = barcode.rawValue;
 
-    if (deviceName == 'INSUL') {
+    if (deviceName == 'INSUL-AGVA') {
       _hivedb.putString('device_name', deviceName!);
       Provider.of<DeviceProvider>(context, listen: false)
           .updateDeviceName(deviceName);
@@ -125,19 +126,28 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
                                       GestureDetector(
-                                          // onTap: () => context.go('/tutorial'),
+                                          onTap: () =>   _bleManager.readOrWriteCharacteristic(BleDeviceInfo.characteristicUuid, BleDeviceInfo.firstCMD, true),
                                           child: Icon(
-                                        CupertinoIcons.info_circle,
+                                        CupertinoIcons.paperplane_fill,
+                                        color: Colors.white,
+                                      )),
+                                      SizedBox(
+                                        width: 20,
+                                      ),
+                                             GestureDetector(
+                                          onTap: () =>   _bleManager.readOrWriteCharacteristic(BleDeviceInfo.characteristicUuid, BleDeviceInfo.secCMD, true),
+                                          child: Icon(
+                                        CupertinoIcons.paperplane,
                                         color: Colors.white,
                                       )),
                                       SizedBox(
                                         width: 20,
                                       ),
                                       InkWell(
-                                          onTap: () {
-                                            // await _requestCameraPermission();
-                                            _bleManager
-                                                .initializeBluetoothListeners();
+                                          onTap: () async {
+                                            await _requestCameraPermission();
+                                            // _bleManager
+                                            //     .initializeBluetoothListeners();
                                           },
                                           child: Icon(
                                             CupertinoIcons.barcode_viewfinder,
@@ -177,8 +187,8 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                 ),
                                 InkWell(
                                   onTap: () => isConnected
-                                      // ? _bleManager.forgetDevice(agvaDevice)
-                                      ? _bleManager.readOrWriteCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26a8', 'CM+SEND', true)
+                                      ? _bleManager.forgetDevice(agvaDevice)
+                                      // ? _bleManager.readOrWriteCharacteristic('beb5483e-36e1-4688-b7f5-ea07361b26a8', 'CM+SEND', true)
                                       : null,
                                   child: AnimatedContainer(
                                     duration: Duration(seconds: 1),
@@ -196,7 +206,7 @@ class _HomeScreenTabletState extends State<HomeScreenTablet> {
                                           padding: const EdgeInsets.all(8.0),
                                           child: Center(
                                               child: Text(
-                                                  'ESP CONNECTED  (Tap to Write CMD) ')),
+                                                  'ESP CONNECTED  (Tap to disconnect) ')),
                                         ),
                                       ),
                                     ),

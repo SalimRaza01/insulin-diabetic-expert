@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../widgets/drawer_widget.dart';
 
 class DevicesScreen extends StatefulWidget {
@@ -53,7 +53,8 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 height: 20,
                               ),
                               Visibility(
-                                visible: isDeviceConnected == true,
+                                 visible: _bleManager.isDeviceConnected.value ==
+                                    true,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(10),

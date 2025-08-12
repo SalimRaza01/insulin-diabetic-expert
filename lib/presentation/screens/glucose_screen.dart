@@ -9,7 +9,7 @@ import '../../core/api/api_service.dart';
 import '../../core/api/nutrition_middleware.dart';
 import '../../core/api/api_config.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/providers/glucose_provider.dart';
 import 'home_screen.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';

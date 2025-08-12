@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:INSUL/core/constants/ble_device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
@@ -11,7 +12,8 @@ import '../widgets/drawer_widget.dart';
 import '../widgets/graph/basal_graph.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 
-  final _hivedb = HiveDbHelper();
+final _hivedb = HiveDbHelper();
+
 class BasalHistory {
   final String basal;
   final DateTime starttime;
@@ -173,6 +175,19 @@ class _BasalWizardState extends State<BasalWizard> {
   DateTime? writingStartTime;
   DateTime? writingEndTime;
   DateTime dateTime = DateTime.now();
+
+
+  String getBasalJsonString() {
+    final Map<String, dynamic> basalData = {
+      "basalUnit": double.tryParse(dosageController.text),
+      "startHour": starttime!.hour,
+      "startMin": starttime!.minute,
+      "endHour": endtime!.hour,
+      "endMin": endtime!.minute,
+    };
+
+    return json.encode(basalData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -508,6 +523,7 @@ class _BasalWizardState extends State<BasalWizard> {
                                                         startTimeController
                                                                 .text =
                                                             "${starttime!.hour}:${starttime!.minute}";
+
                                                         Navigator.pop(context);
                                                       });
                                                     },
@@ -529,11 +545,11 @@ class _BasalWizardState extends State<BasalWizard> {
                                           Container(
                                             height: 200,
                                             child: CupertinoDatePicker(
-                                            initialDateTime: DateTime.now(),
+                                                initialDateTime: DateTime.now(),
                                                 mode: CupertinoDatePickerMode
                                                     .time,
                                                 use24hFormat: true,
-                                                showDayOfWeek: true,
+                                                showDayOfWeek: false,
                                                 minimumDate: DateTime.now(),
                                                 onDateTimeChanged:
                                                     (DateTime newDate) {
@@ -697,7 +713,7 @@ class _BasalWizardState extends State<BasalWizard> {
                                                 mode: CupertinoDatePickerMode
                                                     .time,
                                                 use24hFormat: true,
-                                                showDayOfWeek: true,
+                                                showDayOfWeek: false,
                                                 minimumDate: DateTime.now(),
                                                 onDateTimeChanged:
                                                     (DateTime newDate) {
@@ -800,9 +816,8 @@ class _BasalWizardState extends State<BasalWizard> {
                                   ),
                                   Icon(
                                     Icons.info_outline,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .tertiary,
+                                    color:
+                                        Theme.of(context).colorScheme.tertiary,
                                   ),
                                   SizedBox(
                                     width: width * 0.3,
@@ -820,7 +835,6 @@ class _BasalWizardState extends State<BasalWizard> {
                                       controller: dosageController,
                                       keyboardType: TextInputType.number,
                                       textAlign: TextAlign.center,
-                                  
                                       decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintText: '0.0',
@@ -838,7 +852,7 @@ class _BasalWizardState extends State<BasalWizard> {
                                   // ),
                                   // GestureDetector(
                                   //   onTap: () {
-                        
+
                                   //   },
                                   //   child: SizedBox(
                                   //     child: Icon(
@@ -857,7 +871,10 @@ class _BasalWizardState extends State<BasalWizard> {
                       height: height * 0.03,
                     ),
                     Center(
-                      child: isDeviceConnected == true && startTimeController.text.isNotEmpty && endTimeController.text.isNotEmpty && dosageController.text.isNotEmpty
+                      child: isDeviceConnected == true &&
+                              startTimeController.text.isNotEmpty &&
+                              endTimeController.text.isNotEmpty &&
+                              dosageController.text.isNotEmpty
                           ? Buttons(
                               action: () async {
                                 DateTime writingStartTime =
@@ -865,8 +882,12 @@ class _BasalWizardState extends State<BasalWizard> {
                                 DateTime writingEndTime =
                                     DateTime.parse(endtime.toString());
 
-                                // _bleManager.readOrWriteCharacteristic(
-                                //     char, cmd, false);
+                                final basalJson = getBasalJsonString();
+
+                                _bleManager.readOrWriteCharacteristic(
+                                    BleDeviceInfo.characteristicUuid,
+                                    '${BleDeviceInfo.firstCMD} $basalJson',
+                                    false);
 
                                 await addBasal(endTimeController.text,
                                     dosageController.text, context);
@@ -930,7 +951,6 @@ class _BasalWizardState extends State<BasalWizard> {
                                   startTimeController.clear();
                                   endTimeController.clear();
                                   dosageController.clear();
-                            
                                 }
                               },
                               title: 'SUBMIT',

@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/api_config.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/models/weight_model.dart';
 import '../../data/providers/weight_provider.dart';
 import '../animations/animation_shimmer.dart';

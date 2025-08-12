@@ -69,7 +69,7 @@ class _BasalDeliveryScreenState extends State<BasalDeliveryScreen> {
     }
 
     final totalDose = double.tryParse(doseController.text);
-    final intervalMinutes = int.tryParse(intervalController.text ?? '15') ?? 15;
+    final intervalMinutes = int.tryParse(intervalController.text) ?? 15;
 
     if (totalDose == null || totalDose <= 0) {
       ScaffoldMessenger.of(context).showSnackBar(

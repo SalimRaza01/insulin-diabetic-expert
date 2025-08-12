@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import '../../core/api/api_service.dart';
 import '../../core/api/nutrition_middleware.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../../data/models/nutrition_donut_model.dart';
 import '../../data/models/search_meal_model.dart';
 import '../animations/animation_shimmer.dart';

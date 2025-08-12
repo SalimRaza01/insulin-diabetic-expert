@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_progress_indicator/liquid_progress_indicator.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 
 // ignore: must_be_immutable
 class RessorvoirWidget extends StatelessWidget {

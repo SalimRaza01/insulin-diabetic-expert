@@ -1,17 +1,19 @@
 import 'dart:async';
+import 'package:INSUL/core/constants/ble_device_info.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
 import 'dart:convert';
 import '../../core/api/api_service.dart';
 import '../../core/services/bluetooth_service_provider.dart';
-import '../../core/theme/app_colors.dart';
+import '../../core/constants/app_colors.dart';
 import '../widgets/buttoms_widget.dart';
 import '../widgets/drawer_widget.dart';
 import '../widgets/graph/bolus_graph.dart';
 import 'package:INSUL/core/utils/hive_db_utils.dart';
 
-  final _hivedb = HiveDbHelper();
+final _hivedb = HiveDbHelper();
+
 class DoseEntry {
   final double dose;
   final DateTime timestamp;
@@ -244,6 +246,17 @@ class _BolusWizardState extends State<BolusWizard> {
       },
     );
   }
+
+
+
+  String getBolusJsonString() {
+    final Map<String, dynamic> bolusData = {
+     "bolusUnit": double.parse(activeInsulinController.text),
+    };
+
+    return json.encode(bolusData);
+  }
+  
 
   @override
   void dispose() {
@@ -739,14 +752,18 @@ class _BolusWizardState extends State<BolusWizard> {
                                               GestureDetector(
                                                 onTap: () async {
                                                   setState(() {
+                                                  
                                                     dose = double.parse(
                                                         activeInsulinController
                                                             .text);
                                                   });
-
-                                                  // _bleManager
-                                                  //     .readOrWriteCharacteristic(
-                                                  //         char, cmd, true);
+                                                    final bolusJson = getBolusJsonString();
+                                                  _bleManager
+                                                      .readOrWriteCharacteristic(
+                                                          BleDeviceInfo
+                                                              .characteristicUuid,
+                                                          '${BleDeviceInfo.secCMD} $bolusJson',
+                                                          false);
 
                                                   Navigator.pop(context);
                                                   _waitingDialogBox();

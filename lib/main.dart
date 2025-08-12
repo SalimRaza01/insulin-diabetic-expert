@@ -115,7 +115,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'core/services/bluetooth_service_provider.dart';
 import 'core/services/flutter_background_service.dart';
-import 'core/theme/app_theme.dart';
+import 'core/constants/app_theme.dart';
 import 'core/utils/hive_db_utils.dart';
 import 'data/providers/auth_provider.dart';
 import 'data/providers/basal_delivery_provider.dart';
