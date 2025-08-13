@@ -1,50 +1,55 @@
-# Insulin : Your Personal Diabetic Expert
+# INSUL - Your Personal Diabetic Expert
 
-<img width="960" height="540" alt="file cover - 1" src="https://github.com/user-attachments/assets/4262c67c-0608-472d-8ec7-960b6f011ea0" />
+![INSUL-2](https://github.com/user-attachments/assets/a2e60cb3-6256-414c-88ec-ee06d4a87e4b)
 
+Welcome to **INSUL**, a powerful, Flutter-based mobile application designed to support users with diabetes in managing insulin delivery and tracking vital health metrics. With an intuitive interface and advanced functionality, INSUL is available on both Android and iOS. The app offers features such as smart insulin delivery and Bluetooth connectivity to insulin devices via BLE (Bluetooth Low Energy).
 
-A comprehensive Flutter-based application empowering users with diabetes to manage insulin delivery, nutrition, glucose levels, weight, and payments—with advanced features like smart bolus and seamless Razorpay integration.
+## ✨ Features
 
----
+### 🍽️ Meal Management
+- **Track Carbohydrates**: Easily add meals and track carbohydrate intake.
+- **Smart Insulin Dosing**: Calculate and deliver bolus and basal insulin doses tailored to your needs.
 
-##  Features at a Glance
+### 💉 Insulin Delivery
+- **Personalized Dosing**: Supports both bolus and basal insulin delivery based on meal data and user inputs.
+- **Custom Insulin Settings**: Adjust settings to align with your insulin regimen.
 
-- **Bolus Delivery System**
-  - Manual **Bolus** input for mealtime insulin
-  - **Basal Insulin** reminders for background insulin scheduling
-  - **Smart Bolus Calculator** using contextual data to suggest optimal doses
+### 📊 Health Tracking
+- **Log Key Metrics**: Monitor essential health data such as weight, glucose levels, and insulin dosages.
+- **Historical Tracking**: View trends over time to stay on top of your diabetes management.
 
-- **Nutrition Tracking**
-  - Log meals and nutrient intake
-  - Carbohydrate counting made intuitive (could include "dosed nutrition" – clarify if needed)
+### 🔗 Bluetooth Connectivity
+- **Seamless Device Integration**: Connect to insulin devices via BLE for real-time monitoring and data integration.
 
-- **Health Monitoring**
-  - **Glucose Tracking** with rich charts via **Syncfusion** or **FL Charts**
-  - **Weight Tracking** to log trends over time
-
-- **App Architecture & UI**
-  - Built with **Flutter**
-  - UI components powered by **Syncfusion**
-  - Custom visualizations via **FL Charts**
-
-- **Connectivity**
-  - **BluePlus** (Bluetooth integration) for connecting to glucometers or insulin devices
-
-- **Payments**
-  - Secure **Razorpay** integration for subscriptions, donations, or premium features
+### 🌗 Dark & Light Mode
+- **User Customization**: Choose between dark and light modes to enhance readability and comfort.
 
 ---
 
-##  Tech Stack & Tools
+## 🛠️ Technology Stack
 
-| Layer           | Technologies                                                 |
-|----------------|--------------------------------------------------------------|
-| **Frontend**    | Flutter (Dart)                                               |
-| **UI / Charts** | Syncfusion, FL Charts                                       |
-| **Connectivity**| FlutterBluePlus (Bluetooth)                                  |
-| **Payments**    | Razorpay SDK for Flutter                                    |
+### Flutter
+- Provides a smooth, cross-platform experience on Android and iOS.
+
+### Bluetooth Low Energy (BLE)
+- Connects seamlessly to insulin pumps and other health monitoring devices for continuous data streaming.
+
+### Multiprovider
+- Efficient state management using multiple providers in Flutter.
+
+### Dio
+- Powerful HTTP client for API interactions, supporting interceptors, global configuration, and network requests.
+
+### Firebase Cloud Messaging (FCM)
+- Push notifications to alert users about important events like insulin pump status or health updates.
+
+### Background Service
+- Executes long-running tasks (e.g., data syncing, notifications) even when the app is in the background.
+
+### Syncfusion Charts
+- Advanced charting solutions for visualizing glucose levels, insulin dosages, and other health-related data.
+
+### RazorPay 
+- Payment gateway integration for processing secure payments, in-app purchases, and subscriptions.
 
 ---
-
-##  Project Structure
-
